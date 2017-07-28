@@ -1,0 +1,20 @@
+default: &default
+  adapter: postgresql
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *default
+  database: shopify_development
+  username: XXXXXXXXXXXX
+  password: XXXXXXXXXXXX
+
+test:
+  <<: *default
+  database: shopify_test
+  username: XXXXXXXXXXXX
+  password: XXXXXXXXXXXX
+
+production:
+  <<: *default
+  database: shopify_production
