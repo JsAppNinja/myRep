@@ -22,4 +22,4 @@
 
 /.idea/*
 
-/config/database.yml
+.env
