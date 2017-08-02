@@ -4,8 +4,7 @@ class SessionsController < ApplicationController
   def callback
     response = request.env['omniauth.auth']
     if response.blank?
-      flash[:error] = 'Could not log in to Shopify store.'
-      authenticate_shop
+      redirect_to root_path
       return
     end
 
@@ -19,8 +18,6 @@ class SessionsController < ApplicationController
       account.shopify_token = response['credentials']['token']
       account.activate_session
 
-      #allow(Shopify::Shop).to receive(:current).and_return(OpenStruct.new(email: 'alalal@le.com'))
-
       shop = ShopifyAPI::Shop.current
       account.email = shop.email
 
@@ -32,6 +29,6 @@ class SessionsController < ApplicationController
 
     sign_in(account)
 
-    redirect_to "/"
+    redirect_to root_path
   end
 end
