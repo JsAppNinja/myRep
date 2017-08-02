@@ -5,4 +5,8 @@ Rails.application.routes.draw do
   controller :sessions do
     get 'auth/shopify/callback' => :callback
   end
+
+  controller :static_pages do
+    get 'login' => :login
+  end
 end
