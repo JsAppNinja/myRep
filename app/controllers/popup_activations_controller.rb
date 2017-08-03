@@ -2,12 +2,10 @@ class PopupActivationsController < ApplicationController
   skip_before_action :authenticate_shop
 
   def create
-    popup_activation = PopupActivation.new(popup_activation_params)
-    shop = Shop.find_by(shopify_domain: params[:popup_activation][:shop_name])
-    if shop.present?
-      popup_activation.shop_id = shop.id
-      popup_activation.save
-    end
+    shop_id = Shop.where(shopify_domain: params[:popup_activation][:shop_name]).pluck(:id).first
+    head :ok and return if shop_id.nil?
+    PopupActivation.create!(popup_activation_params.merge(shop_id: shop_id))
+
     head :ok
   end
 
@@ -16,6 +14,6 @@ class PopupActivationsController < ApplicationController
 
 
   def popup_activation_params
-    params[:popup_activation].permit(:customer_id, :ip, :url, :user_agent)
+    params[:popup_activation].permit(:customer_id, :session_token, :ip, :url, :user_agent)
   end
 end
