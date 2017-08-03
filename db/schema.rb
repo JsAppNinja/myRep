@@ -10,10 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170803102408) do
+ActiveRecord::Schema.define(version: 20170803140750) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_trgm"
+
+  create_table "popup_configs", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.boolean "desktop_enabled", default: false
+    t.boolean "desktop_show_on_leave", default: false
+    t.boolean "desktop_show_on_timeout", default: false
+    t.integer "desktop_show_timeout", default: 15
+    t.boolean "tablet_enabled", default: false
+    t.boolean "tablet_show_on_leave", default: false
+    t.boolean "tablet_show_on_timeout", default: false
+    t.integer "tablet_show_timeout", default: 15
+    t.integer "show_days_timeout", default: 30
+    t.jsonb "uri_filters", default: []
+  end
 
   create_table "shops", force: :cascade do |t|
     t.string "shopify_domain", null: false
@@ -30,17 +45,6 @@ ActiveRecord::Schema.define(version: 20170803102408) do
     t.datetime "last_sign_in_at"
     t.inet "current_sign_in_ip"
     t.inet "last_sign_in_ip"
-    t.boolean "enabled", default: false
-    t.boolean "desktop_enabled", default: false
-    t.boolean "desktop_show_on_leave", default: false
-    t.boolean "desktop_show_on_timeout", default: false
-    t.integer "desktop_show_timeout", default: 15
-    t.boolean "tablet_enabled", default: false
-    t.boolean "tablet_show_on_leave", default: false
-    t.boolean "tablet_show_on_timeout", default: false
-    t.integer "tablet_show_timeout", default: 15
-    t.integer "show_days_timeout", default: 30
-    t.jsonb "uri_filters", default: []
     t.index ["email"], name: "index_shops_on_email", unique: true
     t.index ["reset_password_token"], name: "index_shops_on_reset_password_token", unique: true
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
