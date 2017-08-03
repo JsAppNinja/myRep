@@ -9,4 +9,10 @@ Rails.application.routes.draw do
   controller :static_pages do
     get 'login' => :login
   end
+
+  scope :api do
+    scope 'v1' do
+      resource :popup_activation, only: [:create]
+    end
+  end
 end
