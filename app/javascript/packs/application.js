@@ -7,4 +7,15 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-console.log('Hello World from Webpacker')
+import Vue      from 'vue'
+import Settings from './settings.vue'
+import Vuetify  from 'vuetify'
+
+Vue.use(Vuetify);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const settings = new Vue({
+    el:     '#settings',
+    render: (h) => h(Settings)
+  })
+})
