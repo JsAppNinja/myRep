@@ -6,6 +6,10 @@ class PopupConfig < ApplicationRecord
     }
   }
 
+  belongs_to :shop
+
+  validates  :shop_id, presence: true
+
   def self.service_settings(key = nil, hash=SERVICE_SETTINGS)
     return hash if key == nil
 
