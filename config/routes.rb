@@ -10,5 +10,11 @@ Rails.application.routes.draw do
     get 'login' => :login
   end
 
-  resource :settings, only: [:show, :update]
+  namespace :api do
+    namespace :internal do
+      namespace :v1 do
+        resource :popup_config, only: [:show, :update]
+      end
+    end
+  end
 end
