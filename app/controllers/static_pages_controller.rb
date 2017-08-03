@@ -2,7 +2,7 @@ class StaticPagesController < ApplicationController
   skip_before_action :authenticate_shop, only: :login
 
   def index
-    render inline: "Hello #{current_shop.shopify_domain}!"
+    render :index, layout: 'application'
   end
 
   def login

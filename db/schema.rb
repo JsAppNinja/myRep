@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170803082205) do
+ActiveRecord::Schema.define(version: 20170803143322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,7 +23,21 @@ ActiveRecord::Schema.define(version: 20170803082205) do
     t.string "user_agent"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "session_token"
+    t.index ["session_token"], name: "index_popup_activations_on_session_token"
     t.index ["shop_id"], name: "index_popup_activations_on_shop_id"
+  end
+
+  create_table "popup_submits", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "email"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "url"
+    t.string "session_token"
+    t.index ["session_token"], name: "index_popup_submits_on_session_token"
+    t.index ["shop_id"], name: "index_popup_submits_on_shop_id"
   end
 
   create_table "shops", force: :cascade do |t|
