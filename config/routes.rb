@@ -12,8 +12,14 @@ Rails.application.routes.draw do
 
   scope :api do
     scope 'v1' do
+      resources :popup_submits, only: [:destroy, :index]
+    end
+  end
+
+  namespace :api do
+    scope 'v1' do
+      resources :popup_submits, only: [:create]
       resource :popup_activation, only: [:create]
-      resources :popup_submits, only: [:create, :destroy, :index]
     end
   end
 end

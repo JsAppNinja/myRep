@@ -1,4 +1,4 @@
-class PopupActivationsController < ApplicationController
+class Api::PopupActivationsController < ApplicationController
   skip_before_action :authenticate_shop
 
   def create
