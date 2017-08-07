@@ -9,7 +9,12 @@ class PopupConfigSerializer < ActiveModel::Serializer
     {
       uri_filters: {
         allowed_types: PopupConfig.service_settings(:allowed_types),
-        allowed_matching_types: PopupConfig.service_settings(:allowed_matching_types)
+        allowed_matching_types: PopupConfig.service_settings(:allowed_matching_types),
+        new_rule: {
+          type:     PopupConfig.service_settings(:allowed_types).first,
+          matching: PopupConfig.service_settings(:allowed_matching_types).first,
+          uri:      ''
+        }
       }
     }
   end

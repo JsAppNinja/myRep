@@ -73,10 +73,19 @@
           <h6>Triggers</h6>
           <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque, praesentium?</small>
           <div class="mt-3"></div>
-          <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit omnis quibusdam ullam velit vero voluptatem.</small>
+          <small>{{service_fields.$resolved}}</small>
         </v-flex>
         <v-flex sm9>
-          <v-card class="card-last-child-padd">
+
+          <!-- Preloader -->
+
+          <v-card v-if="!data_loaded">
+            <div class="text-xs-center preloader">
+              <v-progress-circular indeterminate v-bind:size="40" class="primary--text"></v-progress-circular>
+            </div>
+          </v-card>
+
+          <v-card class="card-last-child-padd" v-if="data_loaded">
             <v-card-title>
               <v-layout row-md flex-row column child-flex-md>
                 <v-flex md6 class="pb-3">
@@ -202,6 +211,42 @@
             <v-flex sm12>
               <table class="datatable table">
                 <tbody>
+
+                <!-- Add a new rule -->
+                <tr>
+                  <td class="text-xs-left" style="width: 115px;">
+                    <v-select v-bind:items="service_fields.uri_filters.allowed_types"
+                              v-model="service_fields.uri_filters.new_draft_rule.type"
+                              hide-details
+                              single-line
+                    ></v-select>
+                  </td>
+                  <td class="text-xs-left" style="width: 140px;">
+                    <v-select v-bind:items="service_fields.uri_filters.allowed_matching_types"
+                              v-model="service_fields.uri_filters.new_draft_rule.matching"
+                              hide-details
+                              single-line
+                    ></v-select>
+                  </td>
+                  <td class="text-xs-left">
+                    <v-text-field
+                      prefix="http://"
+                      name="trigger-uri-filter"
+                      v-model="service_fields.uri_filters.new_draft_rule.uri"
+                      hide-details
+                    ></v-text-field>
+                  </td>
+                  <td class="text-xs-right">
+                    <v-btn icon dark small success class="mx-1" @click="addUriRule()">
+                      <v-icon dark>add</v-icon>
+                    </v-btn>
+                    <v-btn icon dark small warning class="mx-1" @click="restoreUriRule()">
+                      <v-icon>refresh</v-icon>
+                    </v-btn>
+                  </td>
+                </tr>
+
+
                 <tr v-for="(uriRule, index) in popup_config.uri_filters">
                   <td class="text-xs-left" style="width: 115px;">
                     <v-select v-bind:items="service_fields.uri_filters.allowed_types" v-model="uriRule.type" hide-details single-line></v-select>
@@ -213,7 +258,7 @@
                     <v-text-field
                       prefix="http://"
                       name="trigger-uri-filter"
-                      v-model="uriRule.value"
+                      v-model="uriRule.uri"
                       hide-details
                     ></v-text-field>
                   </td>
@@ -226,19 +271,7 @@
                 </tbody>
               </table>
             </v-flex>
-            <v-card-text>
-              <v-btn
-                absolute
-                dark
-                fab
-                bottom
-                right
-                success
-                @click="addUriRule()"
-              >
-                <v-icon>add</v-icon>
-              </v-btn>
-            </v-card-text>
+
           </v-card>
         </v-flex>
       </v-layout>
@@ -519,8 +552,9 @@
 export default {
   data: function () {
     return {
-      popup_config: {},
+      popup_config:   {},
       service_fields: {},
+      data_loaded:    false,
 
       // example fields
       message: "Hello Vue!",
@@ -612,12 +646,20 @@ export default {
     },
 
     removeUriRule: function (uriIndex) {
-      this.triggers.uri.items.splice(uriIndex, 1)
+      this.popup_config.uri_filters.splice(uriIndex, 1)
     },
 
     addUriRule: function () {
-      var plainItem = { type: "Does", matching: "match", value: "" };
-      this.popup_config.uri_filters.push(plainItem)
+      var newRule = Object.assign({}, this.service_fields.uri_filters.new_draft_rule);
+      this.popup_config.uri_filters.unshift(newRule)
+    },
+
+    restoreUriRule: function () {
+      this.$set(
+          this.service_fields.uri_filters,
+          'new_draft_rule',
+          Object.assign({}, this.service_fields.uri_filters.new_rule)
+      );
     }
   },
 
@@ -625,9 +667,19 @@ export default {
     this.$http.get(window.location + "api/internal/v1/popup_config")
              .then(response => {
                var popup_config = response.body.shop.popup_config;
+               // move service_fields from popup_config
                this.service_fields = popup_config.service_fields;
                delete popup_config.service_fields;
+
+               // made a copy of new uri rule for reset button
+               this.$set(
+                   this.service_fields.uri_filters,
+                   'new_draft_rule',
+                   Object.assign({}, this.service_fields.uri_filters.new_rule)
+               );
+
                this.popup_config = popup_config;
+               this.data_loaded = true;
              }, error => {
                console.log(error.body)
              });
@@ -718,5 +770,9 @@ export default {
   .triggers-after-switch-width {
     max-width: 90px !important;
     min-width: 90px !important;
+  }
+
+  .preloader {
+    padding: 30px;
   }
 </style>

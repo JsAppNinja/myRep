@@ -28,9 +28,9 @@ RSpec.describe Api::Internal::V1::PopupConfigsController, type: :controller do
     let(:popup_config) { FactoryGirl.create(:popup_config, shop_id: shop.id) }
     let(:uri_filter_sample) do
       {
-        type:          PopupConfig.service_settings(:allowed_types).sample,
-        matching_type: PopupConfig.service_settings(:allowed_matching_types).sample,
-        uri:           Faker::Internet.url
+        type:     PopupConfig.service_settings(:allowed_types).sample,
+        matching: PopupConfig.service_settings(:allowed_matching_types).sample,
+        uri:      Faker::Internet.url
       }
     end
 
