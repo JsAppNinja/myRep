@@ -13,6 +13,7 @@ gem 'puma', '~> 3.7'
 gem 'sass-rails', '~> 5.0'
 gem 'dotenv-rails'
 gem 'material_icons'
+gem 'active_model_serializers', '~> 0.10.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
@@ -36,6 +37,11 @@ gem 'jbuilder', '~> 2.5'
 gem 'shopify_app'
 gem 'devise'
 gem 'thin'
+gem 'rack-cors', :require => 'rack/cors'
+gem 'validates_email_format_of'
+
+gem 'kaminari'
+gem 'pager_api'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -46,7 +52,7 @@ group :development, :test do
   gem 'pry'
   gem 'factory_girl_rails'
   gem 'rspec-rails', '~> 3.5'
-  gem 'faker'
+  gem 'faker', '>= 1.8.4'
   gem 'shoulda-matchers', '~> 3.1'
 end
 
