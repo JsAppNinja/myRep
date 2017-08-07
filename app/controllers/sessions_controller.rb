@@ -33,7 +33,7 @@ class SessionsController < ApplicationController
     sign_in(account)
 
     if Rails.env.production?
-      redirect_to "https://#{shop_name}/admin/apps/#{ENV['SHOPIFY_API_KEY']}"
+      redirect_to "https://#{shop_name}/admin/apps/#{ENV['SHOPIFY_CLIENT_API_KEY']}"
     else
       redirect_to root_path
     end
