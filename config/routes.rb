@@ -15,4 +15,12 @@ Rails.application.routes.draw do
       resource :popup_activation, only: [:create]
     end
   end
+
+  namespace :api do
+    namespace :internal do
+      namespace :v1 do
+        resource :popup_config, only: [:show, :update]
+      end
+    end
+  end
 end
