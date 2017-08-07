@@ -10,6 +10,12 @@ Rails.application.routes.draw do
     get 'login' => :login
   end
 
+  scope :api do
+    scope 'v1' do
+      resource :popup_activation, only: [:create]
+    end
+  end
+
   namespace :api do
     namespace :internal do
       namespace :v1 do

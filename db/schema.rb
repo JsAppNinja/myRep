@@ -30,6 +30,17 @@ ActiveRecord::Schema.define(version: 20170803140750) do
     t.jsonb "uri_filters", default: []
   end
 
+  create_table "popup_activations", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.integer "customer_id"
+    t.string "ip"
+    t.string "url"
+    t.string "user_agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shop_id"], name: "index_popup_activations_on_shop_id"
+  end
+
   create_table "shops", force: :cascade do |t|
     t.string "shopify_domain", null: false
     t.string "shopify_token", null: false
