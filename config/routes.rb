@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     get 'login' => :login
   end
 
+  # TODO: move to "internal"
   scope :api do
     scope 'v1' do
       resources :popup_submits, only: [:destroy, :index]
