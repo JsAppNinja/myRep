@@ -23,8 +23,8 @@ module Api
           params.require(:shop).require(:popup_config).permit(
             :desktop_enabled,   :desktop_show_on_leave, :desktop_show_on_timeout, :desktop_show_timeout,
             :tablet_enabled,    :tablet_show_on_leave,  :tablet_show_on_timeout,  :tablet_show_timeout,
-            :show_days_timeout
-          ).merge({ uri_filters: params[:shop][:popup_config][:uri_filters][:items] })
+            :show_days_timeout, uri_filters: [:type, :matching_type, :uri]
+          )
         end
       end
     end
