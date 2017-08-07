@@ -240,8 +240,10 @@
                     <v-btn icon dark small success class="mx-1" @click="addUriRule()">
                       <v-icon dark>add</v-icon>
                     </v-btn>
-                    <v-btn icon dark small warning class="mx-1" @click="restoreUriRule()">
-                      <v-icon>refresh</v-icon>
+                    <v-btn icon dark small warning class="mx-1" @click="restoreUriRule()"
+                           v-tooltip:left="{ html: 'Reset to default values' }"
+                    >
+                      <v-icon>cached</v-icon>
                     </v-btn>
                   </td>
                 </tr>
