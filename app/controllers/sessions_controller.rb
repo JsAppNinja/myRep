@@ -26,6 +26,8 @@ class SessionsController < ApplicationController
       account.password = password
       account.save!
       EventService.new_shop_registered(account)
+    else
+      EventService.new_sign_in(account)
     end
 
     sign_in(account)
