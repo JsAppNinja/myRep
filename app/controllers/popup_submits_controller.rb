@@ -1,5 +1,6 @@
 class PopupSubmitsController < ApplicationController
-  include PagerApi::Pagination::Kaminari
+  # TODO: Find out why it fails on Heroku
+  # include PagerApi::Pagination::Kaminari
 
   def index
     popup_submits = PopupSubmit.where(shop_id: current_shop.id)
