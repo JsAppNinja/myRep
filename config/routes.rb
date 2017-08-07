@@ -9,4 +9,12 @@ Rails.application.routes.draw do
   controller :static_pages do
     get 'login' => :login
   end
+
+  namespace :api do
+    namespace :internal do
+      namespace :v1 do
+        resource :popup_config, only: [:show, :update]
+      end
+    end
+  end
 end
