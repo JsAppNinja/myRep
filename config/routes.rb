@@ -21,5 +21,10 @@ Rails.application.routes.draw do
       resources :popup_submits, only: [:create]
       resource :popup_activation, only: [:create]
     end
+    namespace :internal do
+      namespace :v1 do
+        resource :popup_config, only: [:show, :update]
+      end
+    end
   end
 end
