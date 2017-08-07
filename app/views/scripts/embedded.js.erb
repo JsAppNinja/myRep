@@ -14,14 +14,14 @@
   var iframe = document.createElement("iframe")
   iframe.height = window.innerHeight;
   iframe.width = 800;
-  iframe.src = '<%= ENV["HOST"] %>/frontend';
+  iframe.src = '<%= ENV["SCRIPTS_HOST"] %>/frontend';
 
   container.append(close);
   container.append(iframe);
 
   var style = document.createElement("link", {type: 'text/css'});
   style.rel = 'stylesheet';
-  style.href = '<%= ENV["HOST"] %>/scripts/css';
+  style.href = '<%= ENV["SCRIPTS_HOST"] %>/scripts/css';
   document.body.appendChild(style);
   document.body.appendChild(container);
 
