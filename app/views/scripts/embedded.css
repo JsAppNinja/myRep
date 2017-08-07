@@ -11,3 +11,9 @@
 #slot-machine iframe {
   border: none;
 }
+#close-icon {
+  position: absolute;
+  right: 13px;
+  font-size: 40px;
+  cursor: pointer;
+}

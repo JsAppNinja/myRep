@@ -22,11 +22,18 @@ Rails.application.routes.draw do
     scope 'v1' do
       resources :popup_submits, only: [:create]
       resource :popup_activation, only: [:create]
+      resource :spins, only: [:create]
     end
     namespace :internal do
       namespace :v1 do
         resource :popup_config, only: [:show, :update]
       end
     end
+  end
+
+
+  scope :scripts do
+    get 'js', to: 'scripts#javascript'
+    get 'css', to: 'scripts#stylesheet'
   end
 end

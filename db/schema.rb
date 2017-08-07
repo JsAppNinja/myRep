@@ -14,7 +14,19 @@ ActiveRecord::Schema.define(version: 20170803143322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_trgm"
+
+  create_table "popup_activations", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.integer "customer_id"
+    t.string "ip"
+    t.string "url"
+    t.string "user_agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "session_token"
+    t.index ["session_token"], name: "index_popup_activations_on_session_token"
+    t.index ["shop_id"], name: "index_popup_activations_on_shop_id"
+  end
 
   create_table "popup_configs", force: :cascade do |t|
     t.integer "shop_id", null: false
@@ -28,19 +40,6 @@ ActiveRecord::Schema.define(version: 20170803143322) do
     t.integer "tablet_show_timeout", default: 15
     t.integer "show_days_timeout", default: 30
     t.jsonb "uri_filters", default: []
-  end
-
-  create_table "popup_activations", force: :cascade do |t|
-    t.integer "shop_id", null: false
-    t.integer "customer_id"
-    t.string "ip"
-    t.string "url"
-    t.string "user_agent"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "session_token"
-    t.index ["session_token"], name: "index_popup_activations_on_session_token"
-    t.index ["shop_id"], name: "index_popup_activations_on_shop_id"
   end
 
   create_table "popup_submits", force: :cascade do |t|

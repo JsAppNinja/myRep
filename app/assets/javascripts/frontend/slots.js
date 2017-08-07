@@ -22,7 +22,7 @@ var slotMachine = {
 
 	winningsFormatPrefix: '',  // If winnings are "money", set prefix to be '$', '£', etc. If everything is unit-less, leave as is.
 
-	spinURL: '/slots/spin.php', // point to the server component to call to get spin results.
+	spinURL: '/api/v1/spins', // point to the server component to call to get spin results.
 
 	curBet: minBet,
 	soundEnabled: true,
