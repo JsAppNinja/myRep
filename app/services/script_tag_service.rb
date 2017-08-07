@@ -4,7 +4,7 @@ class ScriptTagService
   def self.insert_script(shop)
     shop.activate_session
     script_tag = ShopifyAPI::ScriptTag.create(script_tag: { event: 'onload', src: JS_SRC })
-    if tag.id.present?
+    if script_tag.id.present?
       shop.update_columns(shopify_script_tag_id: script_tag.id)
     else
       Rollbar.error(StandardError.new(errors: script_tag.errors.full_messages))
