@@ -7,11 +7,13 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import Vue      from 'vue'
-import Settings from './settings.vue'
-import Vuetify  from 'vuetify'
+import Vue         from 'vue'
+import Settings    from './settings.vue'
+import Vuetify     from 'vuetify'
+import VueResource from 'vue-resource'
 
 Vue.use(Vuetify);
+Vue.use(VueResource);
 
 document.addEventListener('DOMContentLoaded', () => {
   const settings = new Vue({

@@ -82,7 +82,7 @@
                 <v-flex md6 class="pb-3">
                   <v-switch
                     label="Show on desktop computers"
-                    v-model="triggers.desktop.enabled"
+                    v-model="popup_config.desktop_enabled"
                     color="info"
                     hide-details
                   ></v-switch>
@@ -90,9 +90,9 @@
                   <v-divider></v-divider>
 
                   <v-switch
-                    v-bind:disabled="!triggers.desktop.enabled"
+                    v-bind:disabled="!popup_config.desktop_enabled"
                     label="On user's leave intent"
-                    v-model="triggers.desktop.onLeave"
+                    v-model="popup_config.desktop_show_on_leave"
                     color="info"
                     hint="When mouse leaves browser's viewport"
                     persistent-hint
@@ -101,9 +101,9 @@
                   <v-layout row-sm column child-flex-sm>
                     <v-flex sm4 class="triggers-after-switch-width">
                       <v-switch
-                        v-bind:disabled="!triggers.desktop.enabled"
+                        v-bind:disabled="!popup_config.desktop_enabled"
                         label="After"
-                        v-model="triggers.desktop.after"
+                        v-model="popup_config.desktop_show_on_timeout"
                         color="info"
                         hide-details
                       ></v-switch>
@@ -111,9 +111,9 @@
 
                     <v-flex sm4>
                       <v-text-field
-                        v-bind:disabled="!triggers.desktop.enabled || !triggers.desktop.after"
+                        v-bind:disabled="!popup_config.desktop_enabled || !popup_config.desktop_show_on_timeout"
                         name="triggers-desktop-after-seconds"
-                        v-model="triggers.desktop.afterSeconds"
+                        v-model="popup_config.desktop_show_timeout"
                         suffix="seconds"
                       ></v-text-field>
                     </v-flex>
@@ -123,7 +123,7 @@
                 <v-flex md6 class="pb-3">
                   <v-switch
                     label="Show on tablets and mobile"
-                    v-model="triggers.mobile.enabled"
+                    v-model="popup_config.tablet_enabled"
                     color="info"
                     hide-details
                   ></v-switch>
@@ -131,9 +131,9 @@
                   <v-divider></v-divider>
 
                   <v-switch
-                    v-bind:disabled="!triggers.mobile.enabled"
+                    v-bind:disabled="!popup_config.tablet_enabled"
                     label="On user's leave intent"
-                    v-model="triggers.mobile.onLeave"
+                    v-model="popup_config.tablet_show_on_leave"
                     color="info"
                     hint="When users suddenly scrolls upwards"
                     persistent-hint
@@ -142,9 +142,9 @@
                   <v-layout row-sm column child-flex-sm>
                     <v-flex sm4 class="triggers-after-switch-width">
                       <v-switch
-                        v-bind:disabled="!triggers.mobile.enabled"
+                        v-bind:disabled="!popup_config.tablet_enabled"
                         label="After"
-                        v-model="triggers.mobile.after"
+                        v-model="popup_config.tablet_show_on_timeout"
                         color="primary"
                         hide-details
                       ></v-switch>
@@ -152,9 +152,9 @@
 
                     <v-flex sm4>
                       <v-text-field
-                        v-bind:disabled="!triggers.mobile.enabled || !triggers.mobile.after"
+                        v-bind:disabled="!popup_config.tablet_enabled || !popup_config.tablet_show_on_timeout"
                         name="triggers-mobile-after-seconds"
-                        v-model="triggers.mobile.afterSeconds"
+                        v-model="popup_config.tablet_show_timeout"
                         suffix="seconds"
                       ></v-text-field>
                     </v-flex>
@@ -173,7 +173,7 @@
                   <v-flex sm4>
                     <v-text-field
                       name="do-not-show"
-                      v-model="triggers.daysStep"
+                      v-model="popup_config.show_days_timeout"
                       suffix="days"
                     ></v-text-field>
                   </v-flex>
@@ -202,12 +202,12 @@
             <v-flex sm12>
               <table class="datatable table">
                 <tbody>
-                <tr v-for="(uriRule, index) in triggers.uri.items">
+                <tr v-for="(uriRule, index) in popup_config.uri_filters">
                   <td class="text-xs-left" style="width: 115px;">
-                    <v-select v-bind:items="triggers.uri.allowedTypes" v-model="uriRule.type" hide-details single-line></v-select>
+                    <v-select v-bind:items="service_fields.uri_filters.allowed_types" v-model="uriRule.type" hide-details single-line></v-select>
                   </td>
                   <td class="text-xs-left" style="width: 140px;">
-                    <v-select v-bind:items="triggers.uri.allowedMatchingTypes" v-model="uriRule.matching" hide-details single-line></v-select>
+                    <v-select v-bind:items="service_fields.uri_filters.allowed_matching_types" v-model="uriRule.matching" hide-details single-line></v-select>
                   </td>
                   <td class="text-xs-left">
                     <v-text-field
@@ -519,6 +519,10 @@
 export default {
   data: function () {
     return {
+      popup_config: {},
+      service_fields: {},
+
+      // example fields
       message: "Hello Vue!",
       shopUrl: "example-shop1.myshopify",
       shopId:  "142536712",
@@ -528,32 +532,6 @@ export default {
         spinned:   5,
         rejected:  1,
         conversionRate: 40
-      },
-      triggers: {
-        desktop: {
-          enabled:      true,
-          onLeave:      true,
-          after:        true,
-          afterSeconds: 15
-        },
-        mobile:  {
-          enabled:      true,
-          onLeave:      true,
-          after:        false,
-          afterSeconds: 15
-        },
-
-        daysStep: 30,
-
-        uri: {
-          allowedTypes: ["Does", "Doesn't"],
-          allowedMatchingTypes: ["match", "contain", "begin with", "end with"],
-          items: [
-            { type: "Does", matching: "contain", value: "contacts" },
-            { type: "Does", matching: "match", value: "help" },
-            { type: "Does", matching: "match", value: "support/ask" },
-          ]
-        }
       },
       campaigns: [
         {
@@ -622,6 +600,8 @@ export default {
     }
   },
 
+  // METHODS
+
   methods: {
     haveActiveCampaigns: function () {
       return this.campaigns.map(function(campaign){ return campaign.active }).indexOf(true) !== -1
@@ -636,9 +616,21 @@ export default {
     },
 
     addUriRule: function () {
-      var plainItem = { type: "Does", matching: "match", value: "" }
-      this.triggers.uri.items.push(plainItem)
+      var plainItem = { type: "Does", matching: "match", value: "" };
+      this.popup_config.uri_filters.push(plainItem)
     }
+  },
+
+  mounted: function () {
+    this.$http.get(window.location + "api/internal/v1/popup_config")
+             .then(response => {
+               var popup_config = response.body.shop.popup_config;
+               this.service_fields = popup_config.service_fields;
+               delete popup_config.service_fields;
+               this.popup_config = popup_config;
+             }, error => {
+               console.log(error.body)
+             });
   }
 }
 </script>
