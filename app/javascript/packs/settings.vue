@@ -55,6 +55,10 @@
     <!-- Collected emails -->
     <CollectedEmails v-bind:collected_emails="emails"></CollectedEmails>
 
+    <v-btn fab dark large primary class="save-button" @click="updateSettings()">
+      <v-progress-circular indeterminate class="white--text" v-if="!data_saved"></v-progress-circular>
+      <v-icon dark v-if="data_saved">save</v-icon>
+    </v-btn>
   </v-app>
 </template>
 
@@ -76,6 +80,7 @@ export default {
       popup_config:   {},
       service_fields: {},
       data_loaded:    false,
+      data_saved:     true,
 
       // example fields
       general: {
@@ -158,7 +163,20 @@ export default {
 
   // METHODS
 
-  methods: {  },
+  methods: {
+    updateSettings: function () {
+      this.data_saved = false;
+      this.$http
+          .put(
+            "/api/internal/v1/popup_config",
+            { shop: { popup_config: this.popup_config } }
+          )
+          .then(resp => {}, resp => { console.log(resp) })
+          .then(
+            () => this.data_saved = true
+          )
+    }
+  },
 
   mounted: function () {
     this.$http.get(window.location + "api/internal/v1/popup_config")
@@ -189,7 +207,13 @@ export default {
 
 <style lang="scss" scoped>
   .container {
-    max-width: 1024px;
+    max-width : 1024px;
+  }
+
+  .save-button {
+    position: fixed;
+    right:    0;
+    bottom:   0;
   }
 </style>
 
