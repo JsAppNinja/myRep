@@ -20,10 +20,11 @@
             <v-layout row-sm flex-row column child-flex-sm>
               <v-flex sm5>
                 <v-switch label="Enable wheel"
-                          v-bind:disabled="!general.resolved"
+                          v-bind:disabled="!general.resolved || freeze_switch"
                           v-model="general.enabled"
                           color="info"
-                          hide-details
+                          hint="This value updates on every change"
+                          persistent-hint
                 ></v-switch>
               </v-flex>
               <v-flex sm5 offset-sm1>
@@ -69,7 +70,33 @@
 
 <script>
   export default {
-    props: ['general']
+    props: ['general'],
+
+    data: function() {
+      return {
+        freeze_switch: false
+      }
+    },
+
+    watch: {
+      'general.enabled': function () {
+        if (this.general.resolved === true) {
+          this.freeze_switch = true;
+          this.$http
+              .put(
+                "/api/internal/v1/shop",
+                { shop: this.general }
+              )
+              .then(
+                resp => {
+                  this.freeze_switch = false;
+                  this.general.enabled = resp.body.enabled
+                },
+                err  => { console.log(err) }
+              )
+        }
+      }
+    }
   }
 </script>
 

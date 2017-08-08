@@ -9,13 +9,18 @@ module Api
         end
 
         def update
+          if current_shop.update(shop_params)
+            render json: { enabled: current_shop.enabled }, status: 200
+          else
+            render json: current_shop.errors.messages, status: 401
+          end
         end
 
 
         private
 
 
-        def popup_config_params
+        def shop_params
           params.require(:shop).permit(:enabled)
         end
       end
