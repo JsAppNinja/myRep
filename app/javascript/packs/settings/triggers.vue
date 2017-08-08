@@ -61,6 +61,8 @@
                       name="triggers-desktop-after-seconds"
                       v-model="triggers.desktop_show_timeout"
                       suffix="seconds"
+                      type="number"
+                      min="0"
                     ></v-text-field>
                   </v-flex>
                 </v-layout>
@@ -102,6 +104,8 @@
                       name="triggers-mobile-after-seconds"
                       v-model="triggers.tablet_show_timeout"
                       suffix="seconds"
+                      type="number"
+                      min="0"
                     ></v-text-field>
                   </v-flex>
                 </v-layout>
@@ -121,6 +125,8 @@
                     name="do-not-show"
                     v-model="triggers.show_days_timeout"
                     suffix="days"
+                    type="number"
+                    min="0"
                   ></v-text-field>
                 </v-flex>
               </v-flex>
