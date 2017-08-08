@@ -10,11 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170803143322) do
+ActiveRecord::Schema.define(version: 20170807123142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_trgm"
+
+  create_table "popup_activations", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.integer "customer_id"
+    t.string "ip"
+    t.string "url"
+    t.string "user_agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "session_token"
+    t.index ["session_token"], name: "index_popup_activations_on_session_token"
+    t.index ["shop_id"], name: "index_popup_activations_on_shop_id"
+  end
 
   create_table "popup_configs", force: :cascade do |t|
     t.integer "shop_id", null: false
@@ -28,19 +40,6 @@ ActiveRecord::Schema.define(version: 20170803143322) do
     t.integer "tablet_show_timeout", default: 15
     t.integer "show_days_timeout", default: 30
     t.jsonb "uri_filters", default: []
-  end
-
-  create_table "popup_activations", force: :cascade do |t|
-    t.integer "shop_id", null: false
-    t.integer "customer_id"
-    t.string "ip"
-    t.string "url"
-    t.string "user_agent"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "session_token"
-    t.index ["session_token"], name: "index_popup_activations_on_session_token"
-    t.index ["shop_id"], name: "index_popup_activations_on_shop_id"
   end
 
   create_table "popup_submits", force: :cascade do |t|
@@ -73,6 +72,18 @@ ActiveRecord::Schema.define(version: 20170803143322) do
     t.index ["email"], name: "index_shops_on_email", unique: true
     t.index ["reset_password_token"], name: "index_shops_on_reset_password_token", unique: true
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
+  end
+
+  create_table "slot_items", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "title"
+    t.string "item_type"
+    t.string "shopify_product_id"
+    t.string "shopify_price_rule_id"
+    t.string "coupon"
+    t.string "image"
+    t.string "product_url"
+    t.index ["shop_id"], name: "index_slot_items_on_shop_id"
   end
 
 end

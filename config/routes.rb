@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     namespace :internal do
       namespace :v1 do
         resource :popup_config, only: [:show, :update]
+        resources :slot_items, only: [:index, :update]
       end
     end
   end
