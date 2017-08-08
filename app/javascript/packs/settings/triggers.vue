@@ -93,7 +93,7 @@
                       v-bind:disabled="!triggers.tablet_enabled"
                       label="After"
                       v-model="triggers.tablet_show_on_timeout"
-                      color="primary"
+                      color="info"
                       hide-details
                     ></v-switch>
                   </v-flex>
