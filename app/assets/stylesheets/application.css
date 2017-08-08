@@ -14,7 +14,11 @@
  *= require material_icons
  *= require vuetify.min
  *= require_self
+ *= require fonts/fonts.css.erb
+ *= require material_icons
+ *= vuetify.min
  */
+
 
 body {
   background-color : #fafafa;
@@ -33,6 +37,7 @@ body {
 }
 
 tbody .input-group__input > .input-group__selections .input-group__selections__comma {
+
   font-size : 13px;
 }
 

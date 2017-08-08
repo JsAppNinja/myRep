@@ -6,6 +6,8 @@ class Shop < ActiveRecord::Base
   include ShopifyApp::Shop
   include ShopifyApp::SessionStorage
 
+  has_many :popup_activations
+  has_many :popup_submits
   has_one :popup_config
 
   def activate_session

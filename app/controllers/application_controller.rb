@@ -16,4 +16,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def respond_with_errors(resource)
+    render json: { errors: resource.errors.full_messages }, status: 422
+  end
+
 end
