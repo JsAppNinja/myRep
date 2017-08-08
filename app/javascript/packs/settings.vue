@@ -77,23 +77,18 @@ export default {
 
   data: function () {
     return {
+      general: {
+        shopify_domain: "example-shop.myshopify",
+        id:             "...",
+        enabled:        true,
+        resolved:       false
+      },
       popup_config:   {},
       service_fields: {},
       data_loaded:    false,
       data_saved:     true,
 
       // example fields
-      general: {
-        shopUrl: "example-shop1.myshopify",
-        shopId:  "142536712",
-        enabled: true,
-        analytics: {
-          displayed: 12,
-          spinned:   5,
-          rejected:  1,
-          conversionRate: 40
-        }
-      },
       campaigns: [
         {
           active:  true,
@@ -169,7 +164,7 @@ export default {
       this.$http
           .put(
             "/api/internal/v1/popup_config",
-            { shop: { popup_config: this.popup_config } }
+            { popup_config: this.popup_config }
           )
           .then(resp => {}, resp => { console.log(resp) })
           .then(
@@ -179,9 +174,15 @@ export default {
   },
 
   mounted: function () {
-    this.$http.get(window.location + "api/internal/v1/popup_config")
-             .then(response => {
-               var popup_config = response.body.shop.popup_config;
+    this.$http.get("api/internal/v1/shop")
+              .then(resp => {
+                this.general = resp.body.shop;
+                this.general['resolved'] = true
+              })
+
+    this.$http.get("api/internal/v1/popup_config")
+             .then(resp => {
+               var popup_config = resp.body.popup_config;
 
                // move service_fields from popup_config
                this.service_fields = popup_config.service_fields;
