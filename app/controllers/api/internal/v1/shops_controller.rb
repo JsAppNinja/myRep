@@ -10,9 +10,9 @@ module Api
 
         def update
           if current_shop.update(shop_params)
-            render json: { enabled: current_shop.enabled }, status: 200
+            render json: { enabled: current_shop.enabled }
           else
-            render json: current_shop.errors.messages, status: 401
+            render json: current_shop.errors.messages, status: 422
           end
         end
 
