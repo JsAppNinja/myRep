@@ -55,10 +55,28 @@
     <!-- Collected emails -->
     <CollectedEmails v-bind:collected_emails="emails"></CollectedEmails>
 
+
+    <!-- Other stuff -->
+
+
+    <!-- Save button -->
+
     <v-btn fab dark large primary class="save-button" @click="updateSettings()">
       <v-progress-circular indeterminate class="white--text" v-if="!data_saved"></v-progress-circular>
       <v-icon dark v-if="data_saved">save</v-icon>
     </v-btn>
+
+    <!-- Snackbar -->
+
+    <v-snackbar :timeout="snackbar.timeout" v-model="snackbar.show"
+                :success="snackbar.type === 'success'" :info="snackbar.type === 'info'"
+                :warning="snackbar.type === 'warning'" :error="snackbar.type === 'error'"
+                :primary="snackbar.type === 'primary'" :secondary="snackbar.type === 'secondary'">
+
+      {{snackbar.text}}
+      <v-btn dark flat @click.native="snackbar.show = false">{{snackbar.button_text}}</v-btn>
+
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -78,7 +96,8 @@ export default {
   data: function () {
     return {
       general: {
-        shopify_domain: "example-shop.myshopify",
+        // to show something when the data is not loaded yet
+        shopify_domain: "example-shop.myshopify.com",
         id:             "...",
         enabled:        true,
         resolved:       false
@@ -87,6 +106,9 @@ export default {
       service_fields: {},
       data_loaded:    false,
       data_saved:     true,
+      snackbar: {
+        show: false,
+      },
 
       // example fields
       campaigns: [
@@ -170,17 +192,33 @@ export default {
           .then(
             () => this.data_saved = true
           )
+    },
+
+    showSnackbar: function (args) {
+      // to avoid influence of previous snackbar properties on a new snackbar
+      // each time we make a copy of this default params with assigned args
+      // to this.snackbar
+
+      var snackbar_default = {
+        show:        true,
+        timeout:     6000,
+        text:        '',
+        type:        'secondary',
+        button_text: 'Close'
+      };
+
+      this.$set(this, 'snackbar', Object.assign(snackbar_default, args))
     }
   },
 
   mounted: function () {
-    this.$http.get("api/internal/v1/shop")
+    this.$http.get("/api/internal/v1/shop")
               .then(resp => {
                 this.general = resp.body.shop;
                 this.general['resolved'] = true
               })
 
-    this.$http.get("api/internal/v1/popup_config")
+    this.$http.get("/api/internal/v1/popup_config")
              .then(resp => {
                var popup_config = resp.body.popup_config;
 
