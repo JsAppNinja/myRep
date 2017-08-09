@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :slot_item do
     shop
     title                 { Faker::Name.title }
-    item_type             { ['coupon', 'product'].sample }
+    item_type             { [SlotItem::COUPON, SlotItem::PRODUCT].sample }
     shopify_product_id    { SecureRandom.random_number(100_000_000) }
     shopify_price_rule_id { SecureRandom.random_number(100_000_000) }
     coupon                { SecureRandom.random_number(100_000_000) }

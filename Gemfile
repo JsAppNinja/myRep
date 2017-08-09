@@ -43,6 +43,7 @@ gem 'validates_email_format_of'
 gem 'kaminari'
 gem 'pager_api'
 
+gem 'carrierwave', '1.1.0'
 gem 'carrierwave-aws'
 gem 'rollbar'
 

@@ -62,24 +62,21 @@ RSpec.describe Api::Internal::V1::PopupConfigsController, type: :request do
     end
 
     context 'with wrong id' do
-      before do
-        @new_title = Faker::Name.title
+      subject do
         patch "/api/internal/v1/slot_items/#{slot_item.id + 10}",
-              params: { slot_item: { title: @new_title } }
+              params: { slot_item: { title: Faker::Name.title} }
       end
 
-      it 'should respond with code 422' do
-        expect(response).to have_http_status(422)
+      it 'should raise error RecordNotFound' do
+        expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
       end
 
       it 'should not update slot_item' do
         old_title = slot_item.title
+        expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
         expect(slot_item.reload.title).to eq(old_title)
       end
 
-      it 'should respond with errors' do
-        expect(json['errors']).to be_present
-      end
     end
   end
 end
