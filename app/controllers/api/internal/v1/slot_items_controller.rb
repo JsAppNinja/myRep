@@ -11,9 +11,9 @@ module Api
         def update
           slot_item = current_shop.slot_items.find(params[:id])
 
-          if slot_item.nil?
-            render json: { errors: 'You cannot update this' }, status: 422
-            return
+
+          if slot_item_params[:item_type] == SlotItem::PRODUCT
+            result = EventService.update_product(current_shop, slot_item, slot_item_params)
           end
 
           slot_item.update(slot_item_params)
