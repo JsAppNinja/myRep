@@ -188,8 +188,10 @@ export default {
             "/api/internal/v1/popup_config",
             { popup_config: this.popup_config }
           )
-          .then(resp => {}, resp => { console.log(resp) })
           .then(
+              resp => { this.showSnackbar({ type: 'success', text: "Successfully saved!" }) },
+              err  => { console.log(err) }
+          ).then(
             () => this.data_saved = true
           )
     },

@@ -13,7 +13,7 @@ module Api
           pc.version += 1
           pc.save
 
-          render json: {}, status: 200
+          render json: {}
         end
 
         def update
