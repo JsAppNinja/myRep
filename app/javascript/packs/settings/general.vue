@@ -28,7 +28,12 @@
                 ></v-switch>
               </v-flex>
               <v-flex sm5 offset-sm1>
-                <v-btn info flat class="preview-btn">Live Preview</v-btn>
+                <v-btn info flat class="preview-btn"
+                       v-bind:disabled="!general.resolved"
+                       @click="openLink()"
+                >
+                  Live Preview
+                </v-btn>
               </v-flex>
             </v-layout>
           </v-card-title>
@@ -95,6 +100,12 @@
                 err  => { console.log(err) }
               )
         }
+      }
+    },
+
+    methods: {
+      openLink: function () {
+        window.open('https://' + this.general.shopify_domain, '_blank')
       }
     }
   }
