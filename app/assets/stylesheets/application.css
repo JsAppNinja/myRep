@@ -70,3 +70,7 @@ table.table tbody tr[active] {
 .input-group--focused > .input-group__details:after {
   background-color : #2196f3;
 }
+
+.flex-row {
+  flex: 0 1 100% !important;
+}
