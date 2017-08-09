@@ -26,7 +26,10 @@ Rails.application.routes.draw do
     end
     namespace :internal do
       namespace :v1 do
-        resource :popup_config, only: [:show, :update]
+        resource :popup_config, only: [:show, :update] do
+          get 'update_version', to: 'popup_configs#update_version'
+        end
+
         resource :shop, only: [:show, :update]
       end
     end

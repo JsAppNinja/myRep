@@ -8,6 +8,14 @@ module Api
           render json: current_shop.popup_config
         end
 
+        def update_version
+          pc = current_shop.popup_config
+          pc.version += 1
+          pc.save
+
+          render json: {}, status: 200
+        end
+
         def update
           if current_shop.popup_config.update(popup_config_params)
             render json: {}, status: 200
