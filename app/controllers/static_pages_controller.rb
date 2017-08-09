@@ -9,4 +9,10 @@ class StaticPagesController < ApplicationController
     render :login, layout: 'static'
   end
 
+  def index
+  end
+
+  def frontend
+    render 'frontend', layout: 'frontend'
+  end
 end

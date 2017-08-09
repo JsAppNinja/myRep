@@ -1,0 +1,68 @@
+body {
+	background: url(../../images/template1/main_bg.png) top center no-repeat;
+}
+#PageContainer { background: transparent url(../../images/template1/main_bg_machine.png) top center no-repeat; }
+#PageContainer.won #PageContainerInner {
+	background: transparent url(../../images/template1/won_bg.png?v=2) 283px 0px no-repeat;
+}
+
+#slotMachineContainer { width: 460px; height: 370px; left: 353px; top: 113px; }
+
+#slotMachineContainer #spinButton {
+	left: 354px; top: 304px; width: 104px; height: 66px;
+	background: transparent url(../../images/template1/spin_button.png) 0 0 no-repeat;
+}
+
+#slotMachineContainer #betContainer { top: 304px; left: 0; width: 355px; height: 65px; }
+#slotMachineContainer #betContainer span { top: 22px; }
+#slotMachineContainer #betContainer #lastWin { left: 12px;  }
+#slotMachineContainer #betContainer #credits { left: 155px; }
+#slotMachineContainer #betContainer #bet { left: 265px; width: 34px; }
+#slotMachineContainer #betContainer #dayWinnings { display: none; }
+#slotMachineContainer #betContainer #lifetimeWinnings { display: none; }
+
+#slotMachineContainer #betContainer #betSpinUp,
+#slotMachineContainer #betContainer #betSpinDown {
+	width: 27px; height: 42px; left: 316px; top: 13px;
+	background: transparent url(../../images/template1/sprites.png) 0 0 no-repeat;
+}
+#slotMachineContainer #betContainer #betSpinDown { top: 35px; background-position: 0 -50px; }
+
+#slotMachineContainer #ReelContainer #reelOverlay {
+	background: transparent url(../../images/template1/reel_overlay.png) 0 center no-repeat;
+}
+
+#slotMachineContainer #ReelContainer .reel {
+	height: 3240px; /* set the height to 3 * the strip PNG height */
+	background: transparent url(../../images/template1/reel_strip.png) 0 0 repeat-y;
+}
+
+ #soundOffButton {
+	right: 70px; top: 495px;
+	background: transparent url(../../images/template1/sprites.png) -50px -50px no-repeat;
+}
+
+#prizes_list { top: 145px; left: 50px; width: 206px; }
+#prizes_list .trPrize {
+	padding-left: 9px; margin-top: -13px; /* we make each row much taller than it is, to accomodate the glow of the winning orange band */
+	height: 55px;
+}
+#prizes_list .tdReels { padding-top: 12px; }
+#prizes_list .tdPayout { padding: 21px 5px 0 0; width: 62px; }
+#prizes_list .trPrize.won { background: transparent url(../../images/template1/prize_won.png) 50% 0 no-repeat; }
+#prizes_list .reelIcon { background: transparent url(../../images/template1/prizes_sprites.png) top left no-repeat; }
+
+#prizes_list .reelIcon.prize_1 { background-position: 0 0; }
+#prizes_list .reelIcon.prize_2 { background-position: -30px 0; }
+#prizes_list .reelIcon.prize_3 { background-position: -60px 0; }
+#prizes_list .reelIcon.prize_4 { background-position: -90px 0; }
+#prizes_list .reelIcon.prize_5 { background-position: -120px 0; }
+#prizes_list .reelIcon.prize_6 { background-position: -150px 0; }
+#prizes_list .reelIcon.prize_stardot5 { background-position: -180px 0; }
+#prizes_list .reelIcon.prize_1slash3slash5 { background-position: -0px -30px; }
+#prizes_list .reelIcon.prize_2slash4slash6 { background-position: -30px -30px; }
+#prizes_list .reelIcon.prize_1slash3 { background-position: -60px -30px; }
+#prizes_list .reelIcon.prize_5slash2 { background-position: -90px -30px; }
+#prizes_list .reelIcon.prize_4slash6 { background-position: -120px -30px; }
+#prizes_list .reelIcon.prize_1slash5 { background-position: -150px -30px; }
+#prizes_list .reelIcon.prize_2slash3 { background-position: -180px -30px; }

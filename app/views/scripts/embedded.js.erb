@@ -1,0 +1,38 @@
+(function(){
+  console.log('loaded.');
+
+
+  var container = document.createElement("div");
+  container.id = "slot-machine";
+  container.height = window.innerHeight;
+  container.width = 800;
+
+  var close = document.createElement("span");
+  close.id = 'close-icon';
+  close.innerHTML = '&times;';
+
+  var iframe = document.createElement("iframe")
+  iframe.height = window.innerHeight;
+  iframe.width = 800;
+  iframe.src = '<%= ENV["SCRIPTS_HOST"] %>/frontend';
+
+  container.append(close);
+  container.append(iframe);
+
+  var style = document.createElement("link", {type: 'text/css'});
+  style.rel = 'stylesheet';
+  style.href = '<%= ENV["SCRIPTS_HOST"] %>/scripts/css';
+  document.body.appendChild(style);
+  document.body.appendChild(container);
+
+  document.body.addEventListener('mouseleave', function(){
+    if (!window.slotsShown){
+      container.classList.add('show');
+    };
+    window.slotsShown = true;
+  });
+  close.addEventListener('click', function(){
+    container.classList.remove('show');
+  });
+
+}).call(this);

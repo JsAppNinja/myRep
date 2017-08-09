@@ -1,0 +1,103 @@
+html, body {
+	margin: 0; padding: 0;
+	font-family:"Helvetica",Arial,"Arial Bold";
+}
+.clearer { clear: both; height: 0; margin: 0; padding: 0; font-size: 0; line-height: 0; }
+a img { border: none; }
+
+
+ #PageContainer,
+ #PageContainerInner {
+	width: 880px; height: 800px;
+	position: relative;
+}
+
+ #PageContainer {
+	margin: 0 auto;
+}
+ #PageContainer.won #PageContainerInner {
+}
+
+/*---------*/
+
+#slotMachineContainer {
+	position: absolute;
+}
+
+#slotMachineContainer #spinButton {
+	position: absolute; cursor: pointer;
+}
+#slotMachineContainer #spinButton:hover { background-position: 0 -100px; }
+#slotMachineContainer #spinButton:active { background-position: 0 -200px; }
+#slotMachineContainer #spinButton.disabled { background-position: 0 -300px; }
+
+#slotMachineContainer #betContainer {
+	position: absolute;
+}
+#slotMachineContainer #betContainer span {
+	display: block; position: absolute; text-align: right;
+	width: 80px; height: 25px;
+	color: #e64e13; font-weight: bold; font-size: 23px;
+}
+
+#slotMachineContainer #betContainer #betSpinUp,
+#slotMachineContainer #betContainer #betSpinDown {
+	position: absolute;
+	cursor: pointer;
+}
+
+#slotMachineContainer #loggedOutMessage,
+#slotMachineContainer #failedRequestMessage {
+	position: absolute;
+	top: 104px; left: 42px; width: 355px;
+	z-index: 1000;
+	padding: 10px; text-align: center;
+	background-color: red; color: white;
+}
+
+/*---------*/
+
+#slotMachineContainer #ReelContainer {
+	position: absolute;
+	left: 13px; top: 14px; width: 435px; height: 283px;
+	overflow: hidden;
+}
+
+#slotMachineContainer #ReelContainer #reelOverlay {
+	position: absolute; top: 0; left:0; right: 0; bottom: 0;
+	z-index: 100;
+}
+
+#slotMachineContainer #ReelContainer .reel {
+	position: absolute;
+	width: 121px; height: 2160px; /* set the height to 3 * the strip PNG height */
+}
+
+#slotMachineContainer #ReelContainer #reel1 { left: 10px; top: -1360px; }
+#slotMachineContainer #ReelContainer #reel2 { left: 158px; top: -992px; }
+#slotMachineContainer #ReelContainer #reel3 { left: 304px; top: -1116px; }
+
+/*----------*/
+
+ #soundOffButton {
+	position: absolute;
+	width: 32px; height: 32px;
+	cursor: pointer;
+}
+
+ #soundOffButton.off { background-position: -50px 0; }
+
+/*---------*/
+
+#prizes_list { position: absolute; height: auto; }
+#prizes_list .trPrize {}
+#prizes_list .tdReels { float: left; clear: both; }
+#prizes_list .tdPayout { float: left; text-align: right; }
+
+#prizes_list .trPrize.won { }
+#prizes_list .trPrize.won .tdPayout { font-weight: bold; }
+
+#prizes_list .tdReels div.reelIcon {
+	width: 30px; height: 30px; float: left; margin: 0 5px;
+	background-repeat: no-repeat;
+}

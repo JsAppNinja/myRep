@@ -1,5 +1,6 @@
 class Api::PopupSubmitsController < ApplicationController
   skip_before_action :authenticate_shop
+  skip_before_action :verify_authenticity_token
 
   def create
     shop_id = Shop.where(shopify_domain: params[:popup_submit][:shop_name]).pluck(:id).first

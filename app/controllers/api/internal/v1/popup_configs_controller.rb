@@ -2,6 +2,7 @@ module Api
   module Internal
     module V1
       class PopupConfigsController< ApplicationController
+        skip_before_action :verify_authenticity_token
 
         def show
           render json: current_shop
@@ -9,9 +10,9 @@ module Api
 
         def update
           if current_shop.popup_config.update(popup_config_params)
-            render json: {}, status: 200
+            render json: {}
           else
-            render json: {}, status: 401
+            render json: current_shop.popup_config.errors.messages, status: 422
           end
         end
 
@@ -23,7 +24,7 @@ module Api
           params.require(:shop).require(:popup_config).permit(
             :desktop_enabled,   :desktop_show_on_leave, :desktop_show_on_timeout, :desktop_show_timeout,
             :tablet_enabled,    :tablet_show_on_leave,  :tablet_show_on_timeout,  :tablet_show_timeout,
-            :show_days_timeout, uri_filters: [:type, :matching_type, :uri]
+            :show_days_timeout, uri_filters: [:type, :matching, :uri]
           )
         end
       end
