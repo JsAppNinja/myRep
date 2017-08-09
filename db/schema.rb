@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170807131136) do
+ActiveRecord::Schema.define(version: 20170809085348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20170807131136) do
     t.integer "tablet_show_timeout", default: 15
     t.integer "show_days_timeout", default: 30
     t.jsonb "uri_filters", default: []
+    t.integer "version", default: 0
   end
 
   create_table "popup_submits", force: :cascade do |t|
@@ -70,6 +71,7 @@ ActiveRecord::Schema.define(version: 20170807131136) do
     t.inet "current_sign_in_ip"
     t.inet "last_sign_in_ip"
     t.string "shopify_script_tag_id"
+    t.boolean "enabled", default: false
     t.index ["email"], name: "index_shops_on_email", unique: true
     t.index ["reset_password_token"], name: "index_shops_on_reset_password_token", unique: true
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true

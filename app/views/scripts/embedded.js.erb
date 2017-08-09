@@ -1,7 +1,6 @@
 (function(){
   console.log('loaded.');
 
-
   var container = document.createElement("div");
   container.id = "slot-machine";
   container.height = window.innerHeight;
@@ -11,7 +10,7 @@
   close.id = 'close-icon';
   close.innerHTML = '&times;';
 
-  var iframe = document.createElement("iframe")
+  var iframe = document.createElement("iframe");
   iframe.height = window.innerHeight;
   iframe.width = 800;
   iframe.src = '<%= ENV["SCRIPTS_HOST"] %>/frontend';
@@ -26,7 +25,7 @@
   document.body.appendChild(container);
 
   document.body.addEventListener('mouseleave', function(){
-    if (!window.slotsShown){
+    if (!window.slotsShown && setCookie()){
       container.classList.add('show');
     };
     window.slotsShown = true;
@@ -34,5 +33,30 @@
   close.addEventListener('click', function(){
     container.classList.remove('show');
   });
+
+
+  function setCookie() {
+    var version = <%= current_shop.popup_config.version %>,
+        cookieKey = "<%= "slotmachine_#{current_shop.id}_version" %>",
+        cookedVersion = getCookie(cookieKey);
+
+    if (cookedVersion && version == cookedVersion) {
+      return false
+    }
+    else {
+      newCookie = cookieKey + '=' + version;
+      document.cookie = newCookie;
+
+      return true
+    }
+  }
+
+
+  function getCookie(name) {
+    var matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+  }
 
 }).call(this);
