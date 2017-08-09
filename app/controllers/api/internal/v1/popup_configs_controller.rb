@@ -18,9 +18,9 @@ module Api
 
         def update
           if current_shop.popup_config.update(popup_config_params)
-            render json: {}, status: 200
+            render json: {}
           else
-            render json: current_shop.popup_config.errors.messages, status: 401
+            render json: current_shop.popup_config.errors.messages, status: 422
           end
         end
 
