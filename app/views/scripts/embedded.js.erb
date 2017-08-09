@@ -1,6 +1,16 @@
 (function(){
   console.log('loaded.');
 
+  var version = <%= current_shop.popup_config.version %>,
+      cookedVersion = getCookie('slotmachine_version');
+
+  if (cookedVersion && version == cookedVersion) {
+    return false
+  }
+  else {
+    newCookie = "slotmachine_version=" + version;
+    document.cookie = newCookie
+  }
 
   var container = document.createElement("div");
   container.id = "slot-machine";
@@ -11,7 +21,7 @@
   close.id = 'close-icon';
   close.innerHTML = '&times;';
 
-  var iframe = document.createElement("iframe")
+  var iframe = document.createElement("iframe");
   iframe.height = window.innerHeight;
   iframe.width = 800;
   iframe.src = '<%= ENV["SCRIPTS_HOST"] %>/frontend';
@@ -34,5 +44,13 @@
   close.addEventListener('click', function(){
     container.classList.remove('show');
   });
+
+
+  function getCookie(name) {
+    var matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+  }
 
 }).call(this);
