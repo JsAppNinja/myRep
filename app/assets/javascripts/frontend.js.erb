@@ -39,6 +39,7 @@ window.addEventListener('message', function(event) {
         };
 
         params.popup_submit = Object.assign(params.popup_submit, event.data.params);
+        params.popup_submit['token'] = window.token;
         sendRequest("POST", "/api/v1/popup_submits", params)
       }
       else
