@@ -3,9 +3,10 @@ class Api::PopupSubmitsController < ApplicationController
 
   def create
     if session[:token] == service_params[:token]
-      shop = Shop.find_by(shopify_domain: service_params[:shop_name])
-      if shop.present? && shop.popup_submits.create(popup_submit_params)
-        head :ok
+      render json: {}, status: 404 unless load_and_check
+
+      if @shop.popup_submits.create(popup_submit_params)
+        render json: {}
       end
     else
       render json: {}, status: 401
@@ -16,8 +17,15 @@ class Api::PopupSubmitsController < ApplicationController
   private
 
 
+  def load_and_check
+    @shop = Shop.find_by(shopify_domain: service_params[:shop_name])
+    @popup_activation = PopupActivation.find_by(session_token: popup_submit_params[:session_token])
+
+    @shop.present? && @popup_activation.present?
+  end
+
   def popup_submit_params
-    params.require(:popup_submit).permit(:email, :name, :url)
+    params.require(:popup_submit).permit(:email, :name, :url, :session_token)
   end
 
   def service_params

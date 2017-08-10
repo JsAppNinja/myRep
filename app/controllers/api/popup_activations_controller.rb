@@ -5,9 +5,9 @@ class Api::PopupActivationsController < ApplicationController
     if session[:token] == service_params[:token]
       shop = Shop.find_by(shopify_domain: service_params[:shop_name])
       if shop.present?
-        shop.popup_activations.create(popup_activation_params)
+        popup_activation = shop.popup_activations.create(popup_activation_params)
+        render json: { session_token: popup_activation.session_token }
       end
-      head :ok
     else
       render json: {}, status: 401
     end
