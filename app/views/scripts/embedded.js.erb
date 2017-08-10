@@ -38,12 +38,6 @@
           params: serviceParams
         }, "*"
       )
-
-      iframe.contentWindow.postMessage({
-          method: "listenPopupSubmit()",
-          params: serviceParams
-        }, "*"
-      )
     };
     window.slotsShown = true;
   });
@@ -53,20 +47,19 @@
 
 
   function setCookie() {
-    return true;
-//    var version = <%= current_shop.popup_config.version %>,
-//        cookieKey = "<%= "slotmachine_#{current_shop.id}_version" %>",
-//        cookedVersion = getCookie(cookieKey);
-//
-//    if (cookedVersion && version == cookedVersion) {
-//      return false
-//    }
-//    else {
-//      newCookie = cookieKey + '=' + version;
-//      document.cookie = newCookie;
-//
-//      return true
-//    }
+    var version = <%= current_shop.popup_config.version %>,
+        cookieKey = "<%= "slotmachine_#{current_shop.id}_version" %>",
+        cookedVersion = getCookie(cookieKey);
+
+    if (cookedVersion && version == cookedVersion) {
+      return false
+    }
+    else {
+      newCookie = cookieKey + '=' + version;
+      document.cookie = newCookie;
+
+      return true
+    }
   }
 
 
