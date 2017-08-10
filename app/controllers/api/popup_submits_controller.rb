@@ -7,6 +7,8 @@ class Api::PopupSubmitsController < ApplicationController
 
       if @shop.popup_submits.create(popup_submit_params)
         render json: {}
+      else
+        render json: {}, status: 422
       end
     else
       render json: {}, status: 401
