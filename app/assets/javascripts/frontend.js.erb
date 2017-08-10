@@ -1,0 +1,35 @@
+//= require ./frontend/index
+
+window.addEventListener('message', function(event) {
+  var publicFunctions = ["createPopupActivation()"];
+
+  var index = publicFunctions.indexOf(event.data.method);
+
+  if (index >= 0) {
+    eval(publicFunctions[index]);
+  } else {
+    return "Don't know that function :("
+  }
+
+  function createPopupActivation() {
+    var token = window.token;
+
+    var params = {
+      popup_activation: {
+        token:     token,
+        url:       event.data.params.url,
+        shop_name: event.data.params.shop_name
+      }
+    };
+
+    sendRequest("POST", "/api/v1/popup_activation", params)
+  }
+
+  function sendRequest (type, url, params) {
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.open(type, "<%= ENV["SCRIPTS_HOST"] %>" + url, true);
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(JSON.stringify(params));
+  }
+});

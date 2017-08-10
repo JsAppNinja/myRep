@@ -27,6 +27,13 @@
   document.body.addEventListener('mouseleave', function(){
     if (!window.slotsShown && setCookie()){
       container.classList.add('show');
+      iframe.contentWindow.postMessage({
+        method: "createPopupActivation()",
+        params: {
+          url:       window.location.pathname,
+          shop_name: window.location.hostname
+        }
+      }, "*");
     };
     window.slotsShown = true;
   });

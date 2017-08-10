@@ -13,6 +13,9 @@ class StaticPagesController < ApplicationController
   end
 
   def frontend
+    @token = SecureRandom.base64(100)
+    session[:token] = @token
+
     render 'frontend', layout: 'frontend'
   end
 end
