@@ -1,7 +1,8 @@
 //= require ./frontend/index
 
 window.addEventListener('message', function(event) {
-  var publicFunctions = ["createPopupActivation()", "listenPopupSubmit()"];
+  var publicFunctions = ["createPopupActivation()", "listenPopupSubmit()"],
+      EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   var index = publicFunctions.indexOf(event.data.method);
 
@@ -28,15 +29,20 @@ window.addEventListener('message', function(event) {
 
   function listenPopupSubmit() {
     document.getElementById('submit-email').onclick = function () {
-      var email  = document.getElementById('email-field').value,
-          params = {
-            popup_submit: {
-              email: email
-            }
-          };
+      var email  = document.getElementById('email-field').value;
 
-      params.popup_submit = Object.assign(params.popup_submit, event.data.params);
-      sendRequest("POST", "/api/v1/popup_submits", params)
+      if (EMAIL_REGEXP.test(email)) {
+        var params = {
+          popup_submit: {
+            email: email
+          }
+        };
+
+        params.popup_submit = Object.assign(params.popup_submit, event.data.params);
+        sendRequest("POST", "/api/v1/popup_submits", params)
+      }
+      else
+        console.log("Invalid email!!!")
     }
   }
 
