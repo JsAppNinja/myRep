@@ -1,13 +1,14 @@
 //= require ./frontend/index
 
 window.addEventListener('message', function(event) {
-  var publicFunctions = ["createPopupActivation()"];
+  var publicFunctions = ["createPopupActivation()", "listenPopupSubmit()"];
 
   var index = publicFunctions.indexOf(event.data.method);
 
   if (index >= 0) {
     eval(publicFunctions[index]);
-  } else {
+  }
+  else {
     return "Don't know that function :("
   }
 
@@ -23,6 +24,20 @@ window.addEventListener('message', function(event) {
     };
 
     sendRequest("POST", "/api/v1/popup_activation", params)
+  }
+
+  function listenPopupSubmit() {
+    document.getElementById('submit-email').onclick = function () {
+      var email  = document.getElementById('email-field').value,
+          params = {
+            popup_submit: {
+              email: email
+            }
+          };
+
+      params.popup_submit = Object.assign(params.popup_submit, event.data.params);
+      sendRequest("POST", "/api/v1/popup_submits", params)
+    }
   }
 
   function sendRequest (type, url, params) {

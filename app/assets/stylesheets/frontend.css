@@ -1,1 +1,11 @@
-//= require frontend/style.css
+/*
+ *= require frontend/style.css
+ */
+
+.email-container {
+  position: absolute;
+  height: 100px;
+  background-color: white;
+  width: 100%;
+  bottom: -30px;
+}

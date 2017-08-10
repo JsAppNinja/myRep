@@ -3,13 +3,11 @@ class Api::PopupSubmitsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def create
-    shop_id = Shop.where(shopify_domain: params[:popup_submit][:shop_name]).pluck(:id).first
-
-    popup_submit = PopupSubmit.new(popup_submit_params.merge(shop_id: shop_id))
-    if popup_submit.save
+    shop = Shop.find_by(shopify_domain: params[:popup_submit][:shop_name])
+    if shop.present? && shop.popup_submits.create(popup_submit_params)
       head :ok
     else
-      respond_with_errors(popup_submit)
+      render json: {}, status: 500
     end
   end
 
@@ -18,6 +16,6 @@ class Api::PopupSubmitsController < ApplicationController
 
 
   def popup_submit_params
-    params[:popup_submit].permit(:email, :name, :url)
+    params.require(:popup_submit).permit(:email, :name, :url)
   end
 end

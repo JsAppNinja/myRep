@@ -27,13 +27,23 @@
   document.body.addEventListener('mouseleave', function(){
     if (!window.slotsShown && setCookie()){
       container.classList.add('show');
+
+      var serviceParams = {
+        url:       window.location.pathname,
+        shop_name: window.location.hostname
+      };
+
       iframe.contentWindow.postMessage({
-        method: "createPopupActivation()",
-        params: {
-          url:       window.location.pathname,
-          shop_name: window.location.hostname
-        }
-      }, "*");
+          method: "createPopupActivation()",
+          params: serviceParams
+        }, "*"
+      )
+
+      iframe.contentWindow.postMessage({
+          method: "listenPopupSubmit()",
+          params: serviceParams
+        }, "*"
+      )
     };
     window.slotsShown = true;
   });
@@ -43,19 +53,20 @@
 
 
   function setCookie() {
-    var version = <%= current_shop.popup_config.version %>,
-        cookieKey = "<%= "slotmachine_#{current_shop.id}_version" %>",
-        cookedVersion = getCookie(cookieKey);
-
-    if (cookedVersion && version == cookedVersion) {
-      return false
-    }
-    else {
-      newCookie = cookieKey + '=' + version;
-      document.cookie = newCookie;
-
-      return true
-    }
+    return true;
+//    var version = <%= current_shop.popup_config.version %>,
+//        cookieKey = "<%= "slotmachine_#{current_shop.id}_version" %>",
+//        cookedVersion = getCookie(cookieKey);
+//
+//    if (cookedVersion && version == cookedVersion) {
+//      return false
+//    }
+//    else {
+//      newCookie = cookieKey + '=' + version;
+//      document.cookie = newCookie;
+//
+//      return true
+//    }
   }
 
 
