@@ -7,6 +7,7 @@ class Api::PopupSubmitsController < ApplicationController
 
     popup_submit = PopupSubmit.new(popup_submit_params.merge(shop_id: shop_id))
     if popup_submit.save
+      EventService.popup_submit_created(popup_submit)
       head :ok
     else
       respond_with_errors(popup_submit)
