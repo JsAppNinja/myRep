@@ -7,9 +7,8 @@ document.getElementById('spinButton').classList.add("disabled");
 window.addEventListener('message', function(event) {
 
   // a list of "public" functions to call from anywhere ()
-  var publicFunctions = ["createPopupActivation()", "listenPopupSubmit()"],
-      session_token   = "",
-      EMAIL_REGEXP    = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  var publicFunctions = ["createPopupActivation()"];
+
 
   var index = publicFunctions.indexOf(event.data.method);
 
@@ -34,40 +33,10 @@ window.addEventListener('message', function(event) {
       }
     };
 
-    sendRequest("POST", "/api/v1/popup_activation", params,
-      function(){
-        window.session_token = JSON.parse(response.responseText).session_token;
-      });
+    sendRequest("POST", "/api/v1/popup_activation", params);
   }
 
-
-  function listenPopupSubmit() {
-    document.getElementById('submit-email').onclick = function () {
-      var email  = document.getElementById('email-field').value;
-
-      if (EMAIL_REGEXP.test(email)) {
-
-        if (window.session_token.length == 0) return;
-
-        var params = {
-          popup_submit: {
-            email:         email,
-            token:         window.token,
-            session_token: window.session_token
-          }
-        };
-
-        params.popup_submit = Object.assign(params.popup_submit, event.data.params);
-        sendRequest("POST", "/api/v1/popup_submits", params, function() {
-            document.getElementById('spinButton').classList.remove("disabled");
-          })
-      }
-      else console.log("Invalid email!!!")
-    }
-  }
-
-
-  function sendRequest (type, url, params, block) {
+  function sendRequest (type, url, params) {
     var xmlhttp  = new XMLHttpRequest();
 
     xmlhttp.open(type, "<%= ENV["SCRIPTS_HOST"] %>" + url, true);
@@ -77,11 +46,8 @@ window.addEventListener('message', function(event) {
     xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState != 4) return;
 
-      if (xmlhttp.status == 200) {
-        response = xmlhttp;
-        block();
-      }
+      if (xmlhttp.status == 200)
+        window.session_token = JSON.parse(xmlhttp.responseText).session_token;
     }
-
   }
 });
