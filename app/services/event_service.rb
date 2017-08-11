@@ -9,6 +9,7 @@ class EventService
 
 
     def new_sign_in(shop)
+      SlotItems::Default.create_slot_items(shop)
       ScriptTagService.check_or_insert_tag(shop)
     end
 

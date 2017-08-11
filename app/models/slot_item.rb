@@ -3,6 +3,7 @@ class SlotItem < ActiveRecord::Base
 
   COUPON = 'coupon'
   PRODUCT = 'product'
+  DEFAULT_NUMBER = 6
 
   validates :title, presence: true, length: { maximum: 255 }
   validates :item_type, presence: true
