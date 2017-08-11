@@ -12,5 +12,9 @@ class EventService
       ScriptTagService.check_or_insert_tag(shop)
     end
 
+    def send_email(popup_submit)
+      EmailService.send_letter(popup_submit)
+    end
+
   end
 end
