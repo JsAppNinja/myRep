@@ -42,7 +42,7 @@
   document.body.appendChild(container);
 
 
-  document.body.addEventListener('mouseleave', function(){
+  function showSlotMachine() {
     if (!window.slotsShown && setCookie()){
       container.classList.add('show');
 
@@ -58,10 +58,43 @@
       )
     }
     window.slotsShown = true;
-  });
+  }
+
+
   close.addEventListener('click', function(){
     container.classList.remove('show');
   });
+
+  // listeners
+
+  if (isMobileDevice) {
+    if (<%= current_shop.popup_config.tablet_show_on_leave %>) {
+      var last_scroll = 0;
+
+      window.addEventListener('scroll', function(event){
+        var offset = window.pageYOffset || document.documentElement.scrollTop;
+        if (offset < last_scroll)
+          showSlotMachine();
+        last_scroll = offset
+      });
+    }
+
+    if (<%= current_shop.popup_config.tablet_show_on_timeout %>) {
+      setTimeout(function(){ showSlotMachine(); }, <%= current_shop.popup_config.tablet_show_timeout * 1000 %>)
+    }
+  }
+  else {
+    if (<%= current_shop.popup_config.desktop_show_on_leave %>) {
+      document.body.addEventListener('mouseleave', function(event){
+        if (event.clientY < 0)
+          showSlotMachine();
+      });
+    }
+
+    if (<%= current_shop.popup_config.desktop_show_on_timeout %>) {
+      setTimeout(function(){ showSlotMachine(); }, <%= current_shop.popup_config.desktop_show_timeout * 1000 %>)
+    }
+  }
 
 
   function setCookie() {
