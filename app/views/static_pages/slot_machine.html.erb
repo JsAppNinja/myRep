@@ -1,0 +1,102 @@
+<%
+  # =====================================================
+  # Modify HERE
+  # =====================================================
+  numIconsPerReel = 6  # Configure here how many icons are in each reel
+  minBet = 1  # Configure the minimum bet a user can make
+  maxBet = 10 # Configure them maximum bet a user can make
+
+  # Read this information from the logged user's profile.
+  credits = 10
+  dayWinnings = 0
+  lifetimeWinnings = 500
+
+  windowID = rand # WindowID is used to identify each Window, in case the user opens more than one at a time, and spins in all of them. Sent straight up to the server.
+  machineName = 'Slot machine!'
+
+  # =====================================================
+  # End Modify HERE
+  # =====================================================
+%>
+
+<div id="PageContainer">
+  <div id="PageContainerInner"> <!-- Just to be able to set the "won!" extra background -->
+
+    <div id="prizes_list">
+      <%
+        # =====================================================
+        # Modify HERE (render prize table)
+        # =====================================================
+        prizes = [
+          { 'id' => 1, 'payout_winnings' => 200, 'image1' => {'image_name' => 'prize_6'}, 'image2' => { 'image_name' => 'prize_6' }, 'image3' => { 'image_name' => 'prize_6' }},
+          { 'id' => 2, 'payout_winnings' => 50, 'image1'  => {'image_name' => 'prize_4'}, 'image2' => { 'image_name' => 'prize_4' }, 'image3' => { 'image_name' => 'prize_4' }},
+          { 'id' => 3, 'payout_winnings' => 20, 'image1'  => {'image_name' => 'prize_2'}, 'image2' => { 'image_name' => 'prize_2' }, 'image3' => { 'image_name' => 'prize_2' }},
+          { 'id' => 4, 'payout_winnings' => 16, 'image1'  => {'image_name' => 'prize_1slash3'}, 'image2' => { 'image_name' => 'prize_5slash2' }, 'image3' => { 'image_name' => 'prize_4slash6' }},
+          { 'id' => 5, 'payout_winnings' => 15, 'image1'  => {'image_name' => 'prize_5'}, 'image2' => { 'image_name' => 'prize_5' }, 'image3' => { 'image_name' => 'prize_5' }},
+          { 'id' => 6, 'payout_winnings' => 14, 'image1'  => {'image_name' => 'prize_1'}, 'image2' => { 'image_name' => 'prize_1' }, 'image3' => { 'image_name' => 'prize_1' }},
+          { 'id' => 7, 'payout_winnings' => 12, 'image1'  => {'image_name' => 'prize_3'}, 'image2' => { 'image_name' => 'prize_3' }, 'image3' => { 'image_name' => 'prize_3' }},
+          { 'id' => 8, 'payout_winnings' => 7, 'image1'   => {'image_name' => 'prize_1slash3slash5' }, 'image2' => { 'image_name' => 'prize_1slash3slash5' }, 'image3' => { 'image_name' => 'prize_1slash3slash5' }},
+          { 'id' => 9, 'payout_winnings' => 1, 'image1'   => {'image_name' => 'prize_stardot5' }, 'image2' => { 'image_name' => 'prize_stardot5' }, 'image3' => { 'image_name' => 'prize_stardot5' }}
+        ]
+        prizes.each do |prize| %>
+          <div id="trPrize_<%= prize['id'] %>" class="trPrize">
+            <div class="tdReels">
+              <div class="reel1 reelIcon <%= prize['image1']['image_name'] %>"></div>
+              <div class="reel2 reelIcon <%= prize['image2']['image_name'] %>"></div>
+              <div class="reel3 reelIcon <%= prize['image3']['image_name'] %>"></div>
+              <div class="clearer"></div>
+            </div>
+            <span class="tdPayout" data-basePayout="<%= prize['payout_winnings'] %>"><%= prize['payout_winnings'] %></span>
+            <div class="clearer"></div>
+          </div>
+      <% end %>
+    </div>
+
+    <div id="SlotMachine"></div>
+
+    <div class="email-container">
+      <input type="email" id="email-field">
+    </div>
+
+    <div id="soundOffButton"></div>
+
+    <script type="text/javascript">
+      var machineName = '<%= machineName %>';
+      var minBet = <%= minBet %>;
+      var maxBet = <%= maxBet %>;
+      var numIconsPerReel = <%= numIconsPerReel %>;
+      var windowID = <%= windowID %>;
+      var token = '<%= @token %>';
+
+      var EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+      var shop_name = document.referrer.split("/")[2],
+          url = document.referrer.split(shop_name)[1],
+          email = "";
+
+
+      function params() {
+        return {
+          popup_submit: {
+            email:         email,
+            token:         window.token,
+            session_token: window.session_token,
+            url:           url,
+            shop_name:     shop_name
+          }
+        }
+      }
+
+      document.getElementById('email-field').onkeyup = function () {
+        email  = document.getElementById('email-field').value;
+
+        if (EMAIL_REGEXP.test(email)) {
+          document.getElementById('spinButton').classList.remove("disabled");
+          window.payload_data = params()
+        }
+      };
+
+    </script>
+    <%= javascript_pack_tag 'slot_machine' %>
+  </div>
+</div>
