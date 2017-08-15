@@ -1,35 +1,33 @@
 <template>
-  <div id="slotMachineContainer">
-    <div id="ReelContainer">
-      <div id="reel1" class="reel" ref="reel1"></div>
-      <div id="reel2" class="reel" ref="reel2"></div>
-      <div id="reel3" class="reel" ref="reel3"></div>
-      <div id="reelOverlay"></div>
+  <div>
+    <div id="slotMachineContainer">
+      <div id="ReelContainer">
+        <div id="reel1" class="reel" ref="reel1"></div>
+        <div id="reel2" class="reel" ref="reel2"></div>
+        <div id="reel3" class="reel" ref="reel3"></div>
+        <div id="reelOverlay"></div>
+      </div>
+
+      <div id="customError" :class="{ display_none: !slot_machine.error_statement }">
+        <p>{{ error_message }}</p>
+      </div>
+
+      <div id="betContainer">
+        <span id="lastWin"></span>
+        <span id="credits">         {{ credits }}</span>
+        <span id="bet">             {{ current_bet }}</span>
+        <span id="dayWinnings">     {{ day_winnings }}</span>
+        <span id="lifetimeWinnings">{{ lifetime_winnings }}</span>
+        <div  id="betSpinUp" @click="changeBetValue(1)"></div>
+        <div  id="betSpinDown" @click="changeBetValue(-1)"></div>
+      </div>
+
+      <div id="spinButton" @click="spin()" :class="{ disabled: !isSpinAllowed }"></div>
     </div>
 
-    <div id="loggedOutMessage" style="display: none;"><span class="large">Sorry, you have been logged off.</span><br />
-      <b>No bids</b> have been deducted from this spin, because you're not logged in anymore.
-      Please <a href="/login">login</a> and try again.
+    <div class="email-container">
+      <input type="email" v-model="email.field">
     </div>
-
-    <div id="failedRequestMessage" style="display: none;"><span class="large">Sorry, we're unable to display your spin because your connection to our server was lost. </span><br />
-      Rest assured that your spin was not wasted.
-      Please check your connection and <a href="#" onclick="window.location.reload();">refresh</a> to try again.
-    </div>
-
-    <div id="customError" style="display: none;"></div>
-
-    <div id="betContainer">
-      <span id="lastWin"></span>
-      <span id="credits">         {{ credits }}</span>
-      <span id="bet">             {{ current_bet }}</span>
-      <span id="dayWinnings">     {{ day_winnings }}</span>
-      <span id="lifetimeWinnings">{{ lifetime_winnings }}</span>
-      <div  id="betSpinUp" @click="changeBetValue(1)"></div>
-      <div  id="betSpinDown" @click="changeBetValue(-1)"></div>
-    </div>
-
-    <div id="spinButton" @click="spin()" v-bind:class="{ disabled: slot_machine.spinning }"></div>
   </div>
 </template>
 
@@ -45,6 +43,7 @@
         current_bet: 1,
         slot_machine: {
           spinning: false,
+          error_statement: false,
           strip_height: 720,    // Update this to match the strip PNG
           alignment_offset: 86, // Play around with this until reels are properly aligned post-spin
 
@@ -59,8 +58,13 @@
           reel_speed_2_delta: 100,   // Slow speed
 
           positioning_rate: 1.1,   // smoothness of reels slowing down animation (should be > 1)
-          bounce_height: 200,
-          bounce_time: 1000
+          bounce_height: 200
+        },
+
+        error_message: null,
+        email: {
+          field: "",
+          EMAIL_REGEXP: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         }
       }
     },
@@ -73,6 +77,8 @@
       },
 
       spin: function() {
+        if (this.isSpinAllowed == false) { return; }
+
         var slot_machine = this.slot_machine;
         var self = this;
 
@@ -195,12 +201,10 @@
 
         elReel.style.top = finalPosition - slot_machine.strip_height;
         var delta = slot_machine.bounce_height;
-        console.log(finalPosition);
 
         elReel.style.top = finalPosition + delta;
 
         var linearStop = function () {
-
           if (delta < 1) {
             clearInterval(linearIntervalId);
             elReel.style.top = finalPosition;
@@ -208,12 +212,22 @@
 
           delta = (delta / slot_machine.positioning_rate);
           elReel.style.top = finalPosition + delta
-
         };
 
         var linearIntervalId = setInterval(linearStop, 10)
+      }
+    },
 
+    computed: {
+      isSpinAllowed: function() {
+        return !this.spinning && this.email.EMAIL_REGEXP.test(this.email.field);
       }
     }
   }
 </script>
+
+<style>
+  .display_none {
+    display: none;
+  }
+</style>
