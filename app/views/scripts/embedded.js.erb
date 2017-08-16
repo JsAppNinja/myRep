@@ -37,7 +37,7 @@
 
   var style = document.createElement("link", {type: 'text/css'});
   style.rel = 'stylesheet';
-  style.href = '<%= ENV["SCRIPTS_HOST"] %>/scripts/css';
+  style.href = '<%= ENV["SCRIPTS_HOST"] + asset_path('embedded.css.scss') %>';
   document.body.appendChild(style);
   document.body.appendChild(container);
 

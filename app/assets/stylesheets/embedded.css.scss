@@ -5,12 +5,24 @@
   background: #fefefe;
   transition: 0.3s left ease-in-out;
 }
+
+#slot-machine.slot-machine-left {
+  left: -880px;
+  transition: 0.3s left ease-in-out;
+}
+#slot-machine.slot-machine-left {
+  left: -880px;
+  transition: 0.3s left ease-in-out;
+}
+
 #slot-machine.show {
   left: 0;
 }
+
 #slot-machine iframe {
   border: none;
 }
+
 #close-icon {
   position: absolute;
   right: 13px;
@@ -18,6 +30,7 @@
   cursor: pointer;
 }
 
+// this style appends to body to prevent scrolling
 .slot-machine-active {
   overflow : hidden;
 }
