@@ -1,33 +1,51 @@
+$x-alignment-offset : -880px;
+
 #slot-machine {
-  position: absolute;
-  top: 0;
-  left: -880px;
-  background: #fefefe;
-  transition: 0.3s left ease-in-out;
-}
+  position   : fixed;
+  background : #fefefe;
+  z-index    : 9999999999999999;
+  transition : 0.3s all ease-in-out;
 
-#slot-machine.slot-machine-left {
-  left: -880px;
-  transition: 0.3s left ease-in-out;
-}
-#slot-machine.slot-machine-left {
-  left: -880px;
-  transition: 0.3s left ease-in-out;
-}
+  &.slot-machine-left {
+    top        : 0;
+    left       : $x-alignment-offset;
 
-#slot-machine.show {
-  left: 0;
+    &.show      { left : 0 }
+    #close-icon { right : 22px; }
+  }
+
+  &.slot-machine-right {
+    top        : 0;
+    right      : $x-alignment-offset;
+
+    &.show      { right : 0 }
+    #close-icon { left : 22px; }
+  }
+
+  &.slot-machine-top {
+    // alignment offset will be specified by javascript
+
+    &.show      { top : 0 }
+    #close-icon { right : 22px; }
+  }
+
+  &.slot-machine-bottom {
+    // alignment offset will be specified by javascript
+
+    &.show      { bottom : 0 }
+    #close-icon { right : 22px; }
+  }
 }
 
 #slot-machine iframe {
-  border: none;
+  border : none;
 }
 
 #close-icon {
-  position: absolute;
-  right: 13px;
-  font-size: 40px;
-  cursor: pointer;
+  position    : absolute;
+  font-size   : 40px;
+  cursor      : pointer;
+  line-height : 1;
 }
 
 // this style appends to body to prevent scrolling
