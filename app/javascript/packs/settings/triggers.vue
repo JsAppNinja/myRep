@@ -133,7 +133,7 @@
 
               <v-flex sm12>
                 <p>Show it again to everyone no matter how many days have passed.</p>
-                <v-btn info small class="ma-0">Reset cookies for all users</v-btn>
+                <v-btn info small class="ma-0" light v-bind:disabled="disable_cookies_reset" @click="resetCookies()">Reset cookies for all users</v-btn>
               </v-flex>
             </v-layout>
           </v-card-title>
@@ -226,7 +226,13 @@
 
 <script>
   export default {
-    props: ['triggers', 'service_fields', 'component_preloader'],
+    data: function () {
+      return {
+        disable_cookies_reset: false
+      }
+    },
+
+    props: ['triggers', 'service_fields', 'component_preloader', 'showSnackbar'],
 
     methods: {
       removeUriRule: function (uriIndex) {
@@ -246,6 +252,20 @@
           'new_draft_rule',
           Object.assign({}, this.service_fields.uri_filters.new_rule)
         );
+      },
+
+      resetCookies: function () {
+        this.disable_cookies_reset = true;
+        this.$http
+            .get('/api/internal/v1/popup_config/update_version')
+            .then(
+                resp => {
+                  this.$parent.showSnackbar({type: 'success', text: "Successfully reset!"});
+                },
+                err => {
+                  console.log(err)
+                }
+            ).then(() => { this.disable_cookies_reset = false })
       }
     }
   }
@@ -255,5 +275,13 @@
   .after-switch-width {
     max-width: 90px !important;
     min-width: 90px !important;
+  }
+
+  button.theme--light {
+    color: #fff !important;
+  }
+
+  button.theme--light[disabled="disabled"] {
+   color: rgba(0, 0, 0, .26) !important;
   }
 </style>

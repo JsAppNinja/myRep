@@ -3,6 +3,26 @@ require 'rails_helper'
 RSpec.describe SessionsController, type: :controller do
   subject { get :callback }
 
+  before do
+    env_for_omniauth
+    allow(ShopifyAPI::Shop).to receive(:current).and_return(
+      OpenStruct.new(email: 'alalal@le.com')
+    )
+    allow(ShopifyAPI::ScriptTag).to receive(:create).and_return(
+      OpenStruct.new(
+          'id': 870402689,
+          'src': 'https:\/\/djavaskripped.org\/fancy.js',
+          'event': 'onload',
+          'created_at': '2017-03-15T13:28:16-04:00',
+          'updated_at': '2017-03-15T13:28:16-04:00',
+          'display_scope': 'all'
+      )
+    )
+    allow(ShopifyAPI::ScriptTag).to receive(:all).and_return(
+      OpenStruct.new('src': 'https:\/\/djavaskripped.org\/fancy.js')
+    )
+  end
+
   describe 'oauth parameters blank' do
     it 'should redirect to root path' do
       expect(subject).to redirect_to(root_path)
@@ -10,13 +30,6 @@ RSpec.describe SessionsController, type: :controller do
   end
 
   describe 'oauth parameters present and it is new shop' do
-    before do
-      env_for_omniauth
-      allow(ShopifyAPI::Shop).to receive(:current).and_return(
-        OpenStruct.new(email: 'alalal@le.com')
-      )
-    end
-
     it 'should create new shop' do
       expect { subject }.to change(Shop, :count).by(1)
     end
@@ -29,7 +42,7 @@ RSpec.describe SessionsController, type: :controller do
     end
 
     it 'should activate session' do
-      expect_any_instance_of(Shop).to receive(:activate_session)
+      expect_any_instance_of(Shop).to receive(:activate_session).twice
       subject
     end
 
@@ -57,7 +70,6 @@ RSpec.describe SessionsController, type: :controller do
     let(:shop) { FactoryGirl.create(:shop) }
 
     before do
-      env_for_omniauth
       request.env['omniauth.auth']['uid'] = shop.shopify_domain
       request.env['omniauth.auth']['credentials']['token'] = shop.shopify_token
     end
@@ -67,23 +79,23 @@ RSpec.describe SessionsController, type: :controller do
     end
 
     it 'should not write down shopify token' do
+      subject
       expect_any_instance_of(Shop).not_to receive(:shopify_token)
+    end
+
+    it 'should activate session' do
+      expect_any_instance_of(Shop).to receive(:activate_session).thrice
       subject
     end
 
-    it 'should not activate session' do
-      expect_any_instance_of(Shop).not_to receive(:activate_session)
-      subject
-    end
-
-    it 'should not perform api call via Shopify::Shop.current' do
-      expect(ShopifyAPI::Shop).not_to receive(:current)
+    it 'should perform api call via Shopify::Shop.current' do
+      expect(ShopifyAPI::Shop).to receive(:current)
       subject
     end
 
     it 'should not write down email' do
-      expect_any_instance_of(Shop).not_to receive(:email)
       subject
+      expect_any_instance_of(Shop).not_to receive(:email)
     end
 
     it 'should perform sign in' do
