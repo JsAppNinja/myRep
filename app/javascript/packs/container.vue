@@ -9,7 +9,9 @@
       </div>
 
       <div id="customError" :class="{ display_none: !slot_machine.error_statement }">
-        <p>{{ error_message }}</p>
+        <p v-for="error_message in error_messages">
+          {{ error_message }}
+        </p>
       </div>
 
       <div id="betContainer">
@@ -26,7 +28,7 @@
     </div>
 
     <div class="email-container">
-      <input type="email" v-model="email.field">
+      <input type="email" v-model="email.field" placeholder="email">
     </div>
   </div>
 </template>
@@ -61,18 +63,30 @@
           bounce_height: 200
         },
 
-        error_message: null,
+        spin_data: {},
+
+        error_messages: null,
         email: {
+          invalid_emails: [],
           field: "",
           EMAIL_REGEXP: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         }
       }
     },
 
+    computed: {
+      isSpinAllowed: function() {
+        return !this.spinning
+               && this.email.EMAIL_REGEXP.test(this.email.field)
+               && this.email.invalid_emails.indexOf(this.email.field) == -1;
+      }
+    },
+
     methods: {
       changeBetValue: function(delta) {
         if (this.current_bet + delta >= minBet && this.current_bet + delta <= this.credits ) {
-          this.current_bet += delta
+          this.current_bet += delta;
+          this.showWonState(false)
         }
       },
 
@@ -84,9 +98,8 @@
 
         if (slot_machine.spinning) { return false; }
 
+        slot_machine.error_statement = false;
         slot_machine.spinning = true;
-        // slot_machine.show_won_state(true);
-
         this.credits -= this.current_bet;
 
         self.startReelSpin(1, 0);
@@ -104,27 +117,49 @@
         var fnStopReelsAndEndSpin = function() {
           // Make the reels stop spinning one by one
           var baseTimeout = 0;
-          window.setTimeout(function(){ self.stopReelSpin(1, spinData.reels[0]); }, baseTimeout);
+          window.setTimeout(function(){ self.stopReelSpin(1, self.spin_data.reels[0]); }, baseTimeout);
           baseTimeout += slot_machine.second_reel_stop_time;
-          window.setTimeout(function(){ self.stopReelSpin(2, spinData.reels[1]); }, baseTimeout);
+          window.setTimeout(function(){ self.stopReelSpin(2, self.spin_data.reels[1]); }, baseTimeout);
           baseTimeout += slot_machine.third_reel_stop_time;
-          window.setTimeout(function(){ self.stopReelSpin(3, spinData.reels[2]); }, baseTimeout);
+          window.setTimeout(function(){ self.stopReelSpin(3, self.spin_data.reels[2]); }, baseTimeout);
 
           baseTimeout += slot_machine.payout_stop_time; // This must be related to the timing of the final animation. Make it a bit less, so the last reel is still bouncing when it lights up
-          window.setTimeout(function(){ self.endSpin(spinData); }, baseTimeout);
+          window.setTimeout(function(){ self.endSpin(self.spin_data); }, baseTimeout);
         }
 
         var FirstReelTimeoutHit = false;
-        var spinData = null;
 
-        window.setTimeout(function(){ FirstReelTimeoutHit = true; if (spinData != null) { fnStopReelsAndEndSpin(); } }, slot_machine.first_reel_stop_time);
+        window.setTimeout(function(){
+          FirstReelTimeoutHit = true;
+          if (self.spin_data.prize !== undefined) { fnStopReelsAndEndSpin(); }
+        }, slot_machine.first_reel_stop_time);
 
-        // TODO: rewrite ajax requests with vue-resource
+        this.$http
+            .post(
+              '/api/v1/popup_submits',
+              // window.params() initialized in slot_machine.html.erb
+              { popup_submit: Object.assign(window.params(), { email: this.email.field }) }
+            )
+            .then(
+              // TODO: slot_machine will be spinning till we don't have any of responses
+              resp => {
+                this.spin_data = JSON.parse(resp.bodyText)
+              },
+              err  => {
+                if (err.status == 422) {
+                  this.error_messages = JSON.parse(err.bodyText);
+                  this.email.invalid_emails.push(this.email.field); // since server-side validation wasn't success, we don't want this email to be sent again
+                }
+                else {
+                  // TODO: we need to delete cookies in this case so that user will be able to try again later,
+                  //       and maybe restore credits and process 401 error in different way
+                  this.error_messages = ["Sorry, there was a problem on our side :("]
+                }
 
-        spinData = {
-          reels: [1, 2, 3],
-          prize: { id: 2, payout_credits: 0, payout_winnings: 100 }
-        }
+                this.slot_machine.error_statement = true;
+                this.stopAllReelSpins()
+              }
+            );
       },
 
       showWonState: function(bWon, prize_id, win_type) {
@@ -139,13 +174,13 @@
         } else {
           document.querySelector('.trPrize').classList.remove("won");
           document.querySelector('#PageContainer, #SlotsOuterContainer').className = ""; // remove all classes
-          document.querySelector('#lastWin').html("");
+          document.querySelector('#lastWin').innerHTML("");
         }
       },
 
-      endSpin: function(data) {
-        if (data.prize != null) {
-          this.showWonState(true, data.prize.id, data.prize.winType);
+      endSpin: function() {
+        if (this.spin_data.prize !== undefined) {
+          this.showWonState(true, this.spin_data.prize.id, this.spin_data.prize.winType);
         }
 
         this.slot_machine.spinning = false
@@ -176,6 +211,17 @@
 
         var timerID = window.setInterval(fnAnimation, 20);
         elReel.dataset.spinTimer = timerID;
+      },
+
+      stopAllReelSpins: function() {
+        var self = this;
+
+        // stop reels one by one
+        window.setTimeout(function(){ self.stopReelSpin(1, 2) }, 200);
+        window.setTimeout(function(){ self.stopReelSpin(2, 3) }, 400);
+        window.setTimeout(function(){ self.stopReelSpin(3, 4) }, 600);
+
+        window.setTimeout(function(){ self.endSpin() }, 2000);
       },
 
       stopReelSpin: function(i, outcome) {
@@ -216,12 +262,6 @@
 
         var linearIntervalId = setInterval(linearStop, 10)
       }
-    },
-
-    computed: {
-      isSpinAllowed: function() {
-        return !this.spinning && this.email.EMAIL_REGEXP.test(this.email.field);
-      }
     }
   }
 </script>
@@ -229,5 +269,23 @@
 <style>
   .display_none {
     display: none;
+  }
+
+  #customError {
+    height   : 88px;
+    overflow : auto;
+  }
+
+  .email-container {
+    position : absolute;
+    height   : 85px;
+    width    : 100%;
+    bottom   : 0;
+  }
+
+  .email-container > input {
+    margin-top  : 20px;
+    margin-left : 280px;
+    width       : 470px;
   }
 </style>
