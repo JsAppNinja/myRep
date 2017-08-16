@@ -11,7 +11,11 @@ class SlotItemImageUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    "uploads/shop_#{model.shop_id}/#{model.class.to_s.underscore}s"
+    if Rails.env.test?
+      "#{Rails.root}/spec/support/uploads/tmp/shop_#{model.shop_id}/#{model.class.to_s.underscore}s"
+    else
+      "uploads/shop_#{model.shop_id}/#{model.class.to_s.underscore}s"
+    end
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:

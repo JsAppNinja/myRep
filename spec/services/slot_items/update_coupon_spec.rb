@@ -4,35 +4,38 @@ RSpec.describe SlotItems::UpdateCoupon do
   let(:shop)      { FactoryGirl.create(:shop) }
   let(:slot_item) { FactoryGirl.create(:slot_item, shop: shop, item_type: SlotItem::COUPON) }
 
-  subject do
-    SlotItems::UpdateCoupon.insert_coupon(shop, slot_item, @slot_item_params)
-  end
-
   describe '.insert_coupon' do
-    let(:new_coupon) { '12345554321' }
-
     context 'with correct parameters' do
+      let(:new_coupon) { '12345554321' }
+      let(:result) { SlotItems::UpdateCoupon.insert_coupon(shop, slot_item, { coupon: new_coupon }) }
+
       it 'should update slot_item with coupon' do
-        @slot_item_params = { coupon: new_coupon }
-        subject
+        result
         expect(slot_item.reload.coupon).to eq(new_coupon)
       end
 
       it 'should return success true' do
-        @slot_item_params = { coupon: new_coupon }
-        expect(subject.success).to be_truthy
+        expect(result.success).to be_truthy
       end
     end
 
     context 'with incorrect parameters' do
-      it 'should return error: Coupon is blank' do
-        @slot_item_params = { coupon: nil }
-        expect(subject.errors).to eq('Coupon is blank')
-      end
+      context 'if coupon is blank' do
+        let(:result) { SlotItems::UpdateCoupon.insert_coupon(shop, slot_item, { coupon: '' }) }
 
-      it 'should return success false if coupon is blank' do
-        @slot_item_params = { coupon: nil }
-        expect(subject.success).to be_falsy
+        it 'should return error' do
+          expect(result.errors).to eq("Coupon can't be blank")
+        end
+
+        it 'should return success false' do
+          expect(result.success).to be_falsy
+        end
+
+        it 'should not update coupon' do
+          old_coupon = slot_item.coupon
+          result
+          expect(slot_item.reload.coupon).to eq(old_coupon)
+        end
       end
     end
   end

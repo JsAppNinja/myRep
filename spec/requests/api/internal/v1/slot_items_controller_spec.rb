@@ -3,14 +3,12 @@ require 'rails_helper'
 RSpec.describe Api::Internal::V1::PopupConfigsController, type: :request do
   let(:shop) { FactoryGirl.create(:shop) }
 
+  before { sign_in shop }
+
   describe 'GET /api/internal/v1/slot_items' do
     before do
-      # devise sign_in
-      sign_in shop
       @slot_items = FactoryGirl.create_list(:slot_item, 7, shop: shop)
-
-      shop_2 = FactoryGirl.create(:shop)
-      @slot_items_2 = FactoryGirl.create_list(:slot_item, 3, shop: shop_2)
+      FactoryGirl.create_list(:slot_item, 3, shop: FactoryGirl.create(:shop))
 
       get '/api/internal/v1/slot_items'
     end
@@ -22,15 +20,6 @@ RSpec.describe Api::Internal::V1::PopupConfigsController, type: :request do
       expect(returned_slot_item_ids).to eq(slot_item_ids)
     end
 
-    it 'should not respond with slot items for not signed in shop' do
-      returned_slot_item_ids = json['slot_items'].map{ |item| item['id'] }.sort
-      slot_item_2_ids = @slot_items_2.map{ |item| item.id }.sort
-
-      expect(returned_slot_item_ids).not_to include(
-        slot_item_2_ids[0], slot_item_2_ids[1], slot_item_2_ids[2]
-      )
-    end
-
     it 'should respond with code 200' do
       expect(response).to have_http_status(200)
     end
@@ -39,14 +28,12 @@ RSpec.describe Api::Internal::V1::PopupConfigsController, type: :request do
   describe 'PATCH /api/internal/v1/slot_items/:id' do
     let(:slot_item) { FactoryGirl.create(:slot_item, shop: shop) }
 
-    before { sign_in shop }
-
     context 'with valid params' do
       let(:new_coupon) { '12345' }
 
       subject do
         patch "/api/internal/v1/slot_items/#{slot_item.id}",
-              params: { slot_item: { coupon: new_coupon, item_type: 'coupon' } }
+              params: { slot_item: { coupon: new_coupon, item_type: SlotItem::COUPON } }
       end
 
       it 'should respond with code 200' do
@@ -65,31 +52,34 @@ RSpec.describe Api::Internal::V1::PopupConfigsController, type: :request do
     end
 
     context 'with wrong params' do
-      subject do
-        patch "/api/internal/v1/slot_items/#{slot_item.id}",
-              params: { slot_item: @slot_item_params }
+      context 'if item type do not selected' do
+        before do
+          patch "/api/internal/v1/slot_items/#{slot_item.id}",
+              params: { slot_item: { item_type: nil } }
+        end
+
+        it 'should respond with error' do
+          expect(json['errors']).to eq('Item type do not selected')
+        end
+
+        it 'should respond with code 422' do
+          expect(response).to have_http_status(422)
+        end
       end
 
-      it 'should respond with error: Item type do not selected' do
-        @slot_item_params = { item_type: nil }
-        subject
-        expect(json['errors']).to eq('Item type do not selected')
-      end
+      context 'if coupon is blank' do
+        before do
+          patch "/api/internal/v1/slot_items/#{slot_item.id}",
+              params: { slot_item: { item_type: SlotItem::COUPON } }
+        end
 
-      it 'should respond with code 422 if item type do not selected' do
-        @slot_item_params = { item_type: nil }
-        expect(subject).to eq(422)
-      end
+        it 'should respond with error' do
+          expect(json['errors']).to eq("Coupon can't be blank")
+        end
 
-      it 'should respond with error: Coupon is blank' do
-        @slot_item_params = { item_type: 'coupon' }
-        subject
-        expect(json['errors']).to eq('Coupon is blank')
-      end
-
-      it 'should respond with code 422 if coupon is blank' do
-        @slot_item_params = { item_type: 'coupon' }
-        expect(subject).to eq(422)
+        it 'should respond with code 422' do
+          expect(response).to have_http_status(422)
+        end
       end
     end
 

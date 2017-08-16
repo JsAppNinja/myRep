@@ -1,35 +1,30 @@
 class SlotItems::UpdateProduct
   def self.insert_product(shop, slot_item, slot_item_params)
-    result = OpenStruct.new
+    result = Struct.new(:success, :errors, :slot_item)
 
-    if slot_item_params[:product_url].nil?
-      result.success = false
-      result.errors = 'No product url'
-      return result
+    if slot_item_params[:product_url].blank?
+      return result.new(false, "Product url can't be blank", slot_item)
     end
 
-    handle = slot_item_params[:product_url].split('/').last
     shop.activate_session
-
-    product = ShopifyAPI::Product.all.where("handle": handle)
-    if product.blank?
-      result.success = false
-      result.errors = 'Cannot find product with this url'
-      return result
+    handle = slot_item_params[:product_url].split('/').last
+    product = ShopifyAPI::Product.where(handle: handle).first
+    if product.nil?
+      return result.new(false, "Can't find product with this url", slot_item)
     end
 
-    slot_item.update(slot_item_params)
-
-    if slot_item_params[:image].nil?
-      first_image_in_product = product.first.images.first.src
-      slot_item.remote_image_url = first_image_in_product
+    if (slot_item_params[:image].blank? && product.images.present? &&
+        product.images.first.present?   && product.images.first.src.present?)
+      slot_item.remote_image_url = product.images.first.src
     end
 
-    slot_item.shopify_product_id = product.first.attributes[:id]
-    slot_item.save!
+    slot_item.shopify_product_id = product.id
 
-    result.success = true
-    result
+    if slot_item.update_attributes(slot_item_params)
+      result.new(true, nil, slot_item)
+    else
+      result.new(false, slot_item.errors.full_messages, slot_item)
+    end
   end
 
 end

@@ -12,13 +12,5 @@ class EventService
       ScriptTagService.check_or_insert_tag(shop)
     end
 
-    def update_product(current_shop, slot_item, slot_item_params)
-      SlotItems::UpdateProduct.insert_product(current_shop, slot_item, slot_item_params)
-    end
-
-    def update_coupon(current_shop, slot_item, slot_item_params)
-      SlotItems::UpdateCoupon.insert_coupon(current_shop, slot_item, slot_item_params)
-    end
-
   end
 end

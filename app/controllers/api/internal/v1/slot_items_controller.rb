@@ -12,14 +12,14 @@ module Api
           slot_item = current_shop.slot_items.find(params[:id])
 
           if slot_item_params[:item_type] == SlotItem::PRODUCT
-            result = EventService.update_product(current_shop, slot_item, slot_item_params)
+            result = SlotItems::UpdateProduct.insert_product(current_shop, slot_item, slot_item_params)
           elsif slot_item_params[:item_type] == SlotItem::COUPON
-            result = EventService.update_coupon(current_shop, slot_item, slot_item_params)
+            result = SlotItems::UpdateCoupon.insert_coupon(current_shop, slot_item, slot_item_params)
           elsif slot_item_params[:item_type].nil?
             render json: { errors: 'Item type do not selected' }, status: 422
             return
           else
-            slot_item.update(slot_item_params)
+            slot_item.update_attributes(title: slot_item_params[:title])
           end
 
           if result.success
