@@ -1,7 +1,7 @@
 #slot-machine {
   position: absolute;
   top: 0;
-  left: -800px;
+  left: -880px;
   background: #fefefe;
   transition: 0.3s left ease-in-out;
 }
@@ -16,4 +16,8 @@
   right: 13px;
   font-size: 40px;
   cursor: pointer;
+}
+
+.slot-machine-active {
+  overflow : hidden;
 }

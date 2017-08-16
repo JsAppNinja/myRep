@@ -27,7 +27,7 @@
 
   var iframe = document.createElement("iframe");
   iframe.height = window.innerHeight;
-  iframe.width = 800;
+  iframe.width = 880;
   iframe.src = '<%= ENV["SCRIPTS_HOST"] %>/slot_machine';
 
 
@@ -45,6 +45,7 @@
   function showSlotMachine() {
     if (!window.slotsShown && setCookie()){
       container.classList.add('show');
+      document.body.classList.add('slot-machine-active');
 
       var serviceParams = {
         url:       window.location.pathname,
@@ -63,6 +64,7 @@
 
   close.addEventListener('click', function(){
     container.classList.remove('show');
+    document.body.classList.remove('slot-machine-active');
   });
 
   // listeners

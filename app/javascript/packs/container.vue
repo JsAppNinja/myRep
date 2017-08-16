@@ -268,7 +268,6 @@
   .email-container {
     position : absolute;
     height   : 85px;
-    width    : 100%;
     bottom   : 0;
   }
 
