@@ -1,5 +1,12 @@
 class ShopSerializer < ActiveModel::Serializer
-  has_one :popup_config
+  attributes :shopify_domain, :id, :enabled, :analytics
 
-  attributes :shopify_domain
+  def analytics
+    {
+      displayed:       rand(50),
+      spinned:         rand(50),
+      rejected:        rand(20),
+      conversion_rate: rand(100)
+    }
+  end
 end
