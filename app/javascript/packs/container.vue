@@ -102,38 +102,6 @@
         slot_machine.spinning = true;
         this.credits -= this.current_bet;
 
-        self.startReelSpin(1, 0);
-        self.startReelSpin(2, slot_machine.second_reel_stop_time);
-        self.startReelSpin(3, slot_machine.second_reel_stop_time + slot_machine.third_reel_stop_time);
-
-        // NOTE: Here was sounds
-
-        // We need to make the reels end spinning at a certain time, synched with the audio, independently of how long the AJAX request takes.
-        // Also, we can't stop until the AJAX request comes back. So we must have a timeout for the first reel stop, and a function that makes
-        //   the magic happen, and whatever happens last (this timeout, or the AJAX response) calls this function.
-        // The sound timings are at: 917ms, 1492ms and 2060ms, which needs to be adjusted by the animation timings
-        //   (which is why i'm setting the first one at 250ms before 917ms)
-
-        var fnStopReelsAndEndSpin = function() {
-          // Make the reels stop spinning one by one
-          var baseTimeout = 0;
-          window.setTimeout(function(){ self.stopReelSpin(1, self.spin_data.reels[0]); }, baseTimeout);
-          baseTimeout += slot_machine.second_reel_stop_time;
-          window.setTimeout(function(){ self.stopReelSpin(2, self.spin_data.reels[1]); }, baseTimeout);
-          baseTimeout += slot_machine.third_reel_stop_time;
-          window.setTimeout(function(){ self.stopReelSpin(3, self.spin_data.reels[2]); }, baseTimeout);
-
-          baseTimeout += slot_machine.payout_stop_time; // This must be related to the timing of the final animation. Make it a bit less, so the last reel is still bouncing when it lights up
-          window.setTimeout(function(){ self.endSpin(self.spin_data); }, baseTimeout);
-        }
-
-        var FirstReelTimeoutHit = false;
-
-        window.setTimeout(function(){
-          FirstReelTimeoutHit = true;
-          if (self.spin_data.prize !== undefined) { fnStopReelsAndEndSpin(); }
-        }, slot_machine.first_reel_stop_time);
-
         this.$http
             .post(
               '/api/v1/popup_submits',
@@ -141,9 +109,41 @@
               { popup_submit: Object.assign(window.params(), { email: this.email.field }) }
             )
             .then(
-              // TODO: slot_machine will be spinning till we don't have any of responses
               resp => {
-                this.spin_data = JSON.parse(resp.bodyText)
+
+
+                this.spin_data = JSON.parse(resp.bodyText);
+
+                self.startReelSpin(1, 0);
+                self.startReelSpin(2, slot_machine.second_reel_stop_time);
+                self.startReelSpin(3, slot_machine.second_reel_stop_time + slot_machine.third_reel_stop_time);
+
+                // NOTE: Here was sounds
+
+                // We need to make the reels end spinning at a certain time, synched with the audio, independently of how long the AJAX request takes.
+                // Also, we can't stop until the AJAX request comes back. So we must have a timeout for the first reel stop, and a function that makes
+                //   the magic happen, and whatever happens last (this timeout, or the AJAX response) calls this function.
+                // The sound timings are at: 917ms, 1492ms and 2060ms, which needs to be adjusted by the animation timings
+                //   (which is why i'm setting the first one at 250ms before 917ms)
+
+                var fnStopReelsAndEndSpin = function() {
+                  // Make the reels stop spinning one by one
+                  var baseTimeout = 0;
+                  window.setTimeout(function(){ self.stopReelSpin(1, self.spin_data.reels[0]); }, baseTimeout);
+                  baseTimeout += slot_machine.second_reel_stop_time;
+                  window.setTimeout(function(){ self.stopReelSpin(2, self.spin_data.reels[1]); }, baseTimeout);
+                  baseTimeout += slot_machine.third_reel_stop_time;
+                  window.setTimeout(function(){ self.stopReelSpin(3, self.spin_data.reels[2]); }, baseTimeout);
+
+                  baseTimeout += slot_machine.payout_stop_time; // This must be related to the timing of the final animation. Make it a bit less, so the last reel is still bouncing when it lights up
+                  window.setTimeout(function(){ self.endSpin(self.spin_data); }, baseTimeout);
+                };
+
+                window.setTimeout(function(){
+                  fnStopReelsAndEndSpin();
+                }, slot_machine.first_reel_stop_time);
+
+
               },
               err  => {
                 if (err.status == 422) {
@@ -157,7 +157,6 @@
                 }
 
                 this.slot_machine.error_statement = true;
-                this.stopAllReelSpins()
               }
             );
       },
@@ -211,17 +210,6 @@
 
         var timerID = window.setInterval(fnAnimation, 20);
         elReel.dataset.spinTimer = timerID;
-      },
-
-      stopAllReelSpins: function() {
-        var self = this;
-
-        // stop reels one by one
-        window.setTimeout(function(){ self.stopReelSpin(1, 2) }, 200);
-        window.setTimeout(function(){ self.stopReelSpin(2, 3) }, 400);
-        window.setTimeout(function(){ self.stopReelSpin(3, 4) }, 600);
-
-        window.setTimeout(function(){ self.endSpin() }, 2000);
       },
 
       stopReelSpin: function(i, outcome) {
