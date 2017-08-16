@@ -87,6 +87,8 @@
     methods: {
       switchState: function () {
         if (this.general.resolved === true) {
+          if (this.freeze_switch === true) { return }
+
           this.freeze_switch   = true;
           this.general.enabled = !this.general.enabled;
 
