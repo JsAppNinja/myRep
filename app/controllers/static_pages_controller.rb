@@ -12,14 +12,6 @@ class StaticPagesController < ApplicationController
   def index
   end
 
-  # TODO: if slot machine will work with vue delete this lines with frontend.html.erb
-  # def frontend
-  #   @token = SecureRandom.base64(100)
-  #   session[:token] = @token
-  #
-  #   render 'frontend', layout: 'frontend'
-  # end
-
   def slot_machine
     @token = SecureRandom.base64(100)
     session[:token] = @token
