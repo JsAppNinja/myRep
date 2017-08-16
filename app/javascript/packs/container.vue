@@ -76,7 +76,7 @@
 
     computed: {
       isSpinAllowed: function() {
-        return !this.spinning
+        return !this.slot_machine.spinning
                && this.email.EMAIL_REGEXP.test(this.email.field)
                && this.email.invalid_emails.indexOf(this.email.field) == -1;
       }
@@ -157,6 +157,7 @@
                 }
 
                 this.slot_machine.error_statement = true;
+                this.endSpin();
               }
             );
       },
