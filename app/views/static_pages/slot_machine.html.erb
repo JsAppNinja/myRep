@@ -57,6 +57,9 @@
     <div id="soundOffButton"></div>
 
     <script type="text/javascript">
+      // we don't want PopupActivation to be created until our slot machine won't be loaded
+      window.slotMachineLoaded = false;
+
       var machineName = '<%= machineName %>';
       var minBet = <%= minBet %>;
       var maxBet = <%= maxBet %>;

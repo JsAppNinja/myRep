@@ -82,7 +82,32 @@
       }
     },
 
+    mounted: function() {
+      window.slotMachine = {};
+
+      // making this function available outside this component
+      window.slotMachine['sendPopupActivation'] = this.sendPopupActivation;
+      window.slotMachineLoaded = true;
+
+      // inform embedded.js.erb that he can show us
+      window.parent.postMessage(true, "*");
+    },
+
     methods: {
+      sendPopupActivation: function(url, params) {
+        this.$http
+            .post(url, params)
+            .then(
+              resp => {
+                window.session_token = JSON.parse(resp.bodyText).session_token;
+              },
+
+              err => {
+                console.log(err)
+              }
+            );
+      },
+
       changeBetValue: function(delta) {
         if (this.current_bet + delta >= minBet && this.current_bet + delta <= this.credits ) {
           this.current_bet += delta;
