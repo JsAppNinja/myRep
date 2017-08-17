@@ -11,7 +11,7 @@ $ ./bin/yarn install
 
 ## Using
 
-### Starting dev server
+### Starting dev server without SSL
 
 If you have installed foreman, you can use Procfile to configure application and simply run `foreman start`.
 
@@ -27,6 +27,8 @@ $ rails s
 // 2 (frontend)
 $ ./bin/webpack-dev-server
 ```
+
+### Starting dev server with SSL
 
 To test/use slotmachine on some site you'll need to start both servers using ssl, since shopify 
 blocks non-htttps requests. To do this, you need to find `config/webpacker.yml` file 
