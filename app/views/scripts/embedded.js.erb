@@ -131,6 +131,8 @@
       return false
     }
     else {
+      // reset cookie first
+      document.cookie = cookieKey + '=';
       newCookie = cookieKey + '=' + version;
       document.cookie = newCookie;
 
