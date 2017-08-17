@@ -12,10 +12,10 @@ class StaticPagesController < ApplicationController
   def index
   end
 
-  def frontend
+  def slot_machine
     @token = SecureRandom.base64(100)
     session[:token] = @token
 
-    render 'frontend', layout: 'frontend'
+    render 'slot_machine', layout: 'frontend'
   end
 end
