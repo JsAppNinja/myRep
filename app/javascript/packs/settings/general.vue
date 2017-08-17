@@ -22,6 +22,7 @@
                 <v-switch label="Enable wheel"
                           v-bind:disabled="!general.resolved || freeze_switch"
                           v-model="general.enabled"
+                          @click="switchState()"
                           color="info"
                           hint="This value updates on every change"
                           persistent-hint
@@ -83,10 +84,12 @@
       }
     },
 
-    watch: {
-      'general.enabled': function () {
+    methods: {
+      switchState: function () {
         if (this.general.resolved === true) {
-          this.freeze_switch = true;
+          this.freeze_switch   = true;
+          this.general.enabled = !this.general.enabled;
+
           this.$http
               .put(
                 "/api/internal/v1/shop",
@@ -95,15 +98,19 @@
               .then(
                 resp => {
                   this.freeze_switch = false;
-                  this.general.enabled = resp.body.enabled
+                  this.general.enabled = resp.body.enabled;
+
+                  var snackbar = {
+                    type: this.general.enabled ? "success" : "warning",
+                    text: this.general.enabled ? "Successfully enabled!" : "Slot machine was disabled"
+                  };
+
+                  this.$parent.showSnackbar(snackbar);
                 },
                 err  => { console.log(err) }
               )
         }
-      }
-    },
-
-    methods: {
+      },
       openLink: function () {
         window.open('https://' + this.general.shopify_domain, '_blank')
       }

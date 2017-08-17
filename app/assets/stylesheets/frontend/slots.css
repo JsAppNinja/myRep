@@ -47,7 +47,8 @@ a img { border: none; }
 }
 
 #slotMachineContainer #loggedOutMessage,
-#slotMachineContainer #failedRequestMessage {
+#slotMachineContainer #failedRequestMessage,
+#slotMachineContainer #customError {
 	position: absolute;
 	top: 104px; left: 42px; width: 355px;
 	z-index: 1000;

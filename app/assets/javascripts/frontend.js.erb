@@ -1,0 +1,53 @@
+//= require ./frontend/index
+
+// disable spin button until we have valid email
+document.getElementById('spinButton').classList.add("disabled");
+
+// main iframe functions
+window.addEventListener('message', function(event) {
+
+  // a list of "public" functions to call from anywhere ()
+  var publicFunctions = ["createPopupActivation()"];
+
+
+  var index = publicFunctions.indexOf(event.data.method);
+
+
+  // calling iframe functions which present in publicFunctions
+  if (index >= 0) {
+    eval(publicFunctions[index]);
+  }
+  else {
+    return "Don't know that function :("
+  }
+
+
+  function createPopupActivation() {
+    var token = window.token;
+
+    var params = {
+      popup_activation: {
+        token:     token,
+        url:       event.data.params.url,
+        shop_name: event.data.params.shop_name
+      }
+    };
+
+    sendRequest("POST", "/api/v1/popup_activation", params);
+  }
+
+  function sendRequest (type, url, params) {
+    var xmlhttp  = new XMLHttpRequest();
+
+    xmlhttp.open(type, "<%= ENV["SCRIPTS_HOST"] %>" + url, true);
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(JSON.stringify(params));
+
+    xmlhttp.onreadystatechange = function () {
+      if (xmlhttp.readyState != 4) return;
+
+      if (xmlhttp.status == 200)
+        window.session_token = JSON.parse(xmlhttp.responseText).session_token;
+    }
+  }
+});
