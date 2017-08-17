@@ -1,8 +1,8 @@
 (function(){
   console.log('loaded.');
 
-  var triggers       = JSON.parse('<%= raw(current_shop.popup_config.js_required_settings) %>'),
-      placement      = '<%= current_shop.popup_config.placement %>',
+  var triggers       = JSON.parse('<%= raw(@shop.popup_config.js_required_settings) %>'),
+      placement      = '<%= @shop.popup_config.placement %>',
       isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
   if (isMobileDevice) {
@@ -93,7 +93,7 @@
   // listeners
 
   if (isMobileDevice) {
-    if (<%= current_shop.popup_config.tablet_show_on_leave %>) {
+    if (<%= @shop.popup_config.tablet_show_on_leave %>) {
       var last_scroll = 0;
 
       window.addEventListener('scroll', function(event){
@@ -104,27 +104,27 @@
       });
     }
 
-    if (<%= current_shop.popup_config.tablet_show_on_timeout %>) {
-      setTimeout(function(){ showSlotMachine(); }, <%= current_shop.popup_config.tablet_show_timeout * 1000 %>)
+    if (<%= @shop.popup_config.tablet_show_on_timeout %>) {
+      setTimeout(function(){ showSlotMachine(); }, <%= @shop.popup_config.tablet_show_timeout * 1000 %>)
     }
   }
   else {
-    if (<%= current_shop.popup_config.desktop_show_on_leave %>) {
+    if (<%= @shop.popup_config.desktop_show_on_leave %>) {
       document.body.addEventListener('mouseleave', function(event){
         if (event.clientY < 0)
           showSlotMachine();
       });
     }
 
-    if (<%= current_shop.popup_config.desktop_show_on_timeout %>) {
-      setTimeout(function(){ showSlotMachine(); }, <%= current_shop.popup_config.desktop_show_timeout * 1000 %>)
+    if (<%= @shop.popup_config.desktop_show_on_timeout %>) {
+      setTimeout(function(){ showSlotMachine(); }, <%= @shop.popup_config.desktop_show_timeout * 1000 %>)
     }
   }
 
 
   function setCookie() {
-    var version = <%= current_shop.popup_config.version %>,
-        cookieKey = "<%= "slotmachine_#{current_shop.id}_version" %>",
+    var version = <%= @shop.popup_config.version %>,
+        cookieKey = "<%= "slotmachine_#{@shop.id}_version" %>",
         cookedVersion = getCookie(cookieKey);
 
     if (cookedVersion && version == cookedVersion) {

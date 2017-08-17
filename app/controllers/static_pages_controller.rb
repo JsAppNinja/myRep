@@ -1,5 +1,5 @@
 class StaticPagesController < ApplicationController
-  skip_before_action :authenticate_shop, only: :login
+  skip_before_action :authenticate_shop, only: [:login, :slot_machine]
 
   def index
     render :index, layout: 'application'
@@ -7,9 +7,6 @@ class StaticPagesController < ApplicationController
 
   def login
     render :login, layout: 'static'
-  end
-
-  def index
   end
 
   def slot_machine
