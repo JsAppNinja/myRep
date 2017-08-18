@@ -7,11 +7,12 @@ class ApplicationController < ActionController::Base
 
 
   def authenticate_shop
-    return if shop_signed_in?
     if params[:shop].present?
-      redirect_to '/auth/shopify?shop=' + params[:shop]
+      shop = Shop.find_by(shopify_domain: params[:shop])
+
+      shop.present? ? sign_in(shop) : redirect_to('/auth/shopify?shop=' + params[:shop])
     else
-      redirect_to ENV['APP_STORE_URL'] || login_path
+      shop_signed_in? ? return : redirect_to(ENV['APP_STORE_URL'] || login_path)
     end
   end
 
