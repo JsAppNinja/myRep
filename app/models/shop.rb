@@ -2,10 +2,6 @@ class Shop < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable
 
-
-  include ShopifyApp::Shop
-  include ShopifyApp::SessionStorage
-
   has_many :popup_activations
   has_many :popup_submits
   has_many :slot_items
