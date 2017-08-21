@@ -1,3 +1,5 @@
+require 'simplecov'
+SimpleCov.start 'rails'
 require 'factory_girl_rails'
 require 'shoulda/matchers'
 
