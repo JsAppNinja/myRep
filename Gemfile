@@ -40,9 +40,6 @@ gem 'thin'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'validates_email_format_of'
 
-gem 'kaminari'
-gem 'pager_api'
-
 gem 'rollbar'
 
 group :development, :test do
