@@ -146,7 +146,7 @@ export default {
       snackbar: {
         show: false,
       },
-      show_plans: false,
+      show_plans:    false,
       show_settings: true,
 
       // example fields
