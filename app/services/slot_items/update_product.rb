@@ -3,14 +3,14 @@ class SlotItems::UpdateProduct
     result = Struct.new(:success, :errors, :slot_item)
 
     if slot_item_params[:product_url].blank?
-      return result.new(false, "Product url can't be blank", slot_item)
+      return result.new(false, ["Product url can't be blank"], slot_item)
     end
 
     shop.activate_session
     handle = slot_item_params[:product_url].split('/').last
     product = ShopifyAPI::Product.where(handle: handle).first
     if product.nil?
-      return result.new(false, "Can't find product with this url", slot_item)
+      return result.new(false, ["Can't find product with this url"], slot_item)
     end
 
     if (slot_item_params[:image].blank? && product.images.present? &&

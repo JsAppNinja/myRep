@@ -24,7 +24,7 @@ RSpec.describe SlotItems::UpdateCoupon do
         let(:result) { SlotItems::UpdateCoupon.insert_coupon(shop, slot_item, { coupon: '' }) }
 
         it 'should return error' do
-          expect(result.errors).to eq("Coupon can't be blank")
+          expect(result.errors).to eq(["Coupon can't be blank"])
         end
 
         it 'should return success false' do

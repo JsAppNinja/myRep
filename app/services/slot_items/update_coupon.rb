@@ -3,7 +3,7 @@ class SlotItems::UpdateCoupon
     result = Struct.new(:success, :errors, :slot_item)
 
     if slot_item_params[:coupon].blank?
-      return result.new(false, "Coupon can't be blank", slot_item)
+      return result.new(false, ["Coupon can't be blank"], slot_item)
     end
 
     if slot_item.update_attributes(slot_item_params)

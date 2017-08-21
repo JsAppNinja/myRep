@@ -31,42 +31,25 @@ RSpec.describe Api::Internal::V1::PopupConfigsController, type: :request do
     context 'with valid params' do
       let(:new_coupon) { '12345' }
 
-      subject do
+      before do
         patch "/api/internal/v1/slot_items/#{slot_item.id}",
               params: { slot_item: { coupon: new_coupon, item_type: SlotItem::COUPON } }
       end
 
       it 'should respond with code 200' do
-        expect(subject).to eq(200)
+        expect(response).to have_http_status(200)
       end
 
       it 'should update slot_item' do
-        subject
         expect(slot_item.reload.coupon).to eq(new_coupon)
       end
 
       it 'should respond with slot_item' do
-        subject
         expect(json['slot_item']['id'].to_i).to eq(slot_item.id)
       end
     end
 
     context 'with wrong params' do
-      context 'if item type do not selected' do
-        before do
-          patch "/api/internal/v1/slot_items/#{slot_item.id}",
-              params: { slot_item: { item_type: nil } }
-        end
-
-        it 'should respond with error' do
-          expect(json['errors']).to eq('Item type do not selected')
-        end
-
-        it 'should respond with code 422' do
-          expect(response).to have_http_status(422)
-        end
-      end
-
       context 'if coupon is blank' do
         before do
           patch "/api/internal/v1/slot_items/#{slot_item.id}",
@@ -74,7 +57,7 @@ RSpec.describe Api::Internal::V1::PopupConfigsController, type: :request do
         end
 
         it 'should respond with error' do
-          expect(json['errors']).to eq("Coupon can't be blank")
+          expect(json['errors']).to eq(["Coupon can't be blank"])
         end
 
         it 'should respond with code 422' do

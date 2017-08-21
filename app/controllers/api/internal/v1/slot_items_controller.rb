@@ -13,13 +13,8 @@ module Api
 
           if slot_item_params[:item_type] == SlotItem::PRODUCT
             result = SlotItems::UpdateProduct.insert_product(current_shop, slot_item, slot_item_params)
-          elsif slot_item_params[:item_type] == SlotItem::COUPON
+          else slot_item_params[:item_type] == SlotItem::COUPON
             result = SlotItems::UpdateCoupon.insert_coupon(current_shop, slot_item, slot_item_params)
-          elsif slot_item_params[:item_type].nil?
-            render json: { errors: 'Item type do not selected' }, status: 422
-            return
-          else
-            slot_item.update_attributes(title: slot_item_params[:title])
           end
 
           if result.success

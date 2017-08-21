@@ -75,7 +75,7 @@ RSpec.describe SlotItems::UpdateProduct do
         let(:result) { SlotItems::UpdateProduct.insert_product(shop, slot_item, { product_url: '' }) }
 
         it 'should return error' do
-          expect(result.errors).to eq("Product url can't be blank")
+          expect(result.errors).to eq(["Product url can't be blank"])
         end
 
         it 'should return success false' do
@@ -96,7 +96,7 @@ RSpec.describe SlotItems::UpdateProduct do
 
         it 'should return error' do
           allow(ShopifyAPI::Product).to receive(:where).and_return([])
-          expect(result.errors).to eq("Can't find product with this url")
+          expect(result.errors).to eq(["Can't find product with this url"])
         end
 
         it 'should return success false' do
