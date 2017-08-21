@@ -38,6 +38,5 @@ Rails.application.routes.draw do
 
   scope :scripts do
     get 'js', to: 'scripts#javascript'
-    get 'css', to: 'scripts#stylesheet'
   end
 end

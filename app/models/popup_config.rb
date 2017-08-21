@@ -11,6 +11,8 @@ class PopupConfig < ApplicationRecord
   validates  :shop_id, presence: true
   validate   :validate_uri_filters
 
+  enum placement: %w(left right top bottom)
+
 
   def self.service_settings(key = nil, hash=SERVICE_SETTINGS)
     return hash if key == nil

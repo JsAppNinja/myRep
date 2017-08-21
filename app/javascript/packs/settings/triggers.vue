@@ -24,7 +24,7 @@
 
         <v-card class="card-last-child-padd" v-if="!component_preloader">
           <v-card-title>
-            <v-layout row-md flex-row column child-flex-md>
+            <v-layout row-md flex-row child-flex-md>
               <v-flex md6 class="pb-3">
                 <v-switch
                   label="Show on desktop computers"
@@ -109,6 +109,28 @@
                     ></v-text-field>
                   </v-flex>
                 </v-layout>
+              </v-flex>
+            </v-layout>
+            <v-layout flex-row row-sm column child-flex-sm>
+              <v-flex md3>
+                <v-radio color="info" hide-details label="Left"
+                         v-model="triggers.placement" value="left">
+                </v-radio>
+              </v-flex>
+              <v-flex md3>
+                <v-radio color="info" hide-details label="Right"
+                         v-model="triggers.placement" value="right">
+                </v-radio>
+              </v-flex>
+              <v-flex md3>
+                <v-radio color="info" hide-details label="Top"
+                         v-model="triggers.placement" value="top">
+                </v-radio>
+              </v-flex>
+              <v-flex md3>
+                <v-radio color="info" hide-details label="Bottom"
+                         v-model="triggers.placement" value="bottom">
+                </v-radio>
               </v-flex>
             </v-layout>
           </v-card-title>
@@ -272,6 +294,10 @@
 </script>
 
 <style scoped>
+  .flex-row {
+    width: 100%;
+  }
+
   .after-switch-width {
     max-width: 90px !important;
     min-width: 90px !important;

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170809085348) do
+ActiveRecord::Schema.define(version: 20170816132538) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20170809085348) do
     t.integer "show_days_timeout", default: 30
     t.jsonb "uri_filters", default: []
     t.integer "version", default: 0
+    t.integer "placement", default: 0
   end
 
   create_table "popup_submits", force: :cascade do |t|
