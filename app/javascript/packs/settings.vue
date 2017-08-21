@@ -1,70 +1,106 @@
 <template>
-  <v-app light>
+  <v-app light toolbar class="settings">
 
-    <!-- General settings -->
-    <General v-bind:general="general"></General>
+    <v-toolbar class="primary" dark fixed>
+      <v-container>
+        <v-toolbar-title>
+          <transition name="back-btn">
+            <v-btn dark small primary flat class="header-btn white--text" v-if="show_plans" @click="show_plans = !show_plans">
+              <v-icon class="white--text">chevron_left</v-icon> Back
+            </v-btn>
+          </transition>
 
-    <v-container>
-      <v-layout row>
-        <v-divider></v-divider>
-      </v-layout>
-    </v-container>
+          SlotMachine
 
+          <transition name="slide-fade">
+            <v-btn dark small class="red darken-1 header-btn header-upgrade-btn" v-if="show_settings" @click="show_settings = !show_settings">
+              Upgrade
+            </v-btn>
+          </transition>
+        </v-toolbar-title>
+      </v-container>
+    </v-toolbar>
 
-    <!-- Triggers -->
-    <Triggers v-bind:triggers="popup_config"
-              :service_fields="service_fields"
-              :component_preloader="!data_loaded"
-    ></Triggers>
+    <!-- <main> gives some space so that navbar will not overlap settings -->
+    <!-- all settings -->
+    <transition name="slide-fade" v-on:after-leave="show_plans = !show_plans" appear>
+      <main v-if="show_settings">
 
+        <!-- General settings -->
+        <General v-bind:general="general"></General>
 
-    <v-container>
-      <v-layout row>
-        <v-divider></v-divider>
-      </v-layout>
-    </v-container>
-
-    <!-- Campaigns -->
-    <Campaigns v-bind:campaigns="campaigns"></Campaigns>
-
-
-    <v-container>
-      <v-layout row>
-        <v-divider></v-divider>
-      </v-layout>
-    </v-container>
-
-    <!-- Branding -->
-    <Branding v-bind:branding="branding"></Branding>
-
-    <v-container>
-      <v-layout row>
-        <v-divider></v-divider>
-      </v-layout>
-    </v-container>
-
-    <!-- Slot slices -->
-    <SlotSlices v-bind:slot_slices="slices"></SlotSlices>
-
-    <v-container>
-      <v-layout row>
-        <v-divider></v-divider>
-      </v-layout>
-    </v-container>
-
-    <!-- Collected emails -->
-    <CollectedEmails v-bind:collected_emails="emails"></CollectedEmails>
+        <v-container>
+          <v-layout row transition="slide-x-transition">
+            <v-divider></v-divider>
+          </v-layout>
+        </v-container>
 
 
-    <!-- Other stuff -->
+        <!-- Triggers -->
+        <Triggers v-bind:triggers="popup_config"
+                  :service_fields="service_fields"
+                  :component_preloader="!data_loaded"
+        ></Triggers>
 
 
-    <!-- Save button -->
+        <v-container>
+          <v-layout row>
+            <v-divider></v-divider>
+          </v-layout>
+        </v-container>
 
-    <v-btn fab dark large primary class="save-button" @click="updateSettings()">
-      <v-progress-circular indeterminate class="white--text" v-if="!data_saved"></v-progress-circular>
-      <v-icon dark v-if="data_saved">save</v-icon>
-    </v-btn>
+        <!-- Campaigns -->
+        <Campaigns v-bind:campaigns="campaigns"></Campaigns>
+
+
+        <v-container>
+          <v-layout row>
+            <v-divider></v-divider>
+          </v-layout>
+        </v-container>
+
+        <!-- Branding -->
+        <Branding v-bind:branding="branding"></Branding>
+
+        <v-container>
+          <v-layout row>
+            <v-divider></v-divider>
+          </v-layout>
+        </v-container>
+
+        <!-- Slot slices -->
+        <SlotSlices v-bind:slot_slices="slices"></SlotSlices>
+
+        <v-container>
+          <v-layout row>
+            <v-divider></v-divider>
+          </v-layout>
+        </v-container>
+
+        <!-- Collected emails -->
+        <CollectedEmails v-bind:collected_emails="emails"></CollectedEmails>
+
+
+        <!-- Other stuff -->
+
+
+        <!-- Save button -->
+
+        <v-btn fab dark large primary class="save-button" @click="updateSettings()">
+          <v-progress-circular indeterminate class="white--text" v-if="!data_saved"></v-progress-circular>
+          <v-icon dark v-if="data_saved">save</v-icon>
+        </v-btn>
+      </main>
+    </transition>
+
+
+    <!-- bying page -->
+    <transition name="slide-fade" v-on:after-leave="show_settings = !show_settings">
+      <main v-if="show_plans">
+        <Pricing></Pricing>
+      </main>
+    </transition>
+
 
     <!-- Snackbar -->
 
@@ -87,10 +123,11 @@ import Campaigns       from './settings/campaigns'
 import Branding        from './settings/branding'
 import SlotSlices      from './settings/slot_slices'
 import CollectedEmails from './settings/collected_emails'
+import Pricing         from './settings/pricing'
 
 export default {
   components: {
-    General, Triggers, Campaigns, Branding, SlotSlices, CollectedEmails
+    General, Triggers, Campaigns, Branding, SlotSlices, CollectedEmails, Pricing
   },
 
   data: function () {
@@ -109,6 +146,8 @@ export default {
       snackbar: {
         show: false,
       },
+      show_plans:    false,
+      show_settings: true,
 
       // example fields
       campaigns: [
@@ -247,8 +286,35 @@ export default {
 
 
 <style lang="scss" scoped>
+  /* Styles that applied only for this component */
+
   .container {
-    max-width : 1024px;
+    max-width:  1024px;
+    margin:     0 auto !important;
+    min-height: 1px !important;
+  }
+
+  .toolbar__title {
+    margin-left: 0;
+    overflow: visible;
+  }
+
+  main {
+    padding-top: 80px;
+  }
+
+  .header-btn > .btn__content > i {
+    margin-left: -10px;
+  }
+
+  .header-btn {
+    top: -1px;
+    margin: 0;
+  }
+
+  .header-upgrade-btn {
+    top: 0px;
+    float: right;
   }
 
   .save-button {
@@ -256,10 +322,50 @@ export default {
     right:    0;
     bottom:   0;
   }
+
+  /* transitions */
+
+  .slide-fade-enter-active {
+    transition: all .3s ease;
+  }
+
+  .slide-fade-leave-active {
+    transition: all .3s ease;
+  }
+
+  .slide-fade-enter{
+    transform: translateX(30px);
+    opacity: 0;
+  }
+
+  .slide-fade-leave-to {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+
+  .back-btn-enter-active {
+    transition: all .3s ease;
+  }
+
+  .back-btn-leave-active {
+    transition: all .3s ease;
+  }
+
+  .back-btn-enter{
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+
+  .back-btn-leave-to {
+    transform: translateX(30px);
+    opacity: 0;
+  }
 </style>
 
 
 <style lang="scss">
+  /* Global styles for all child components */
+
   h6 { font-size: 20px !important; }
 
   small {
