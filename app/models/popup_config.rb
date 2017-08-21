@@ -11,6 +11,8 @@ class PopupConfig < ApplicationRecord
   validates  :shop_id, presence: true
   validate   :validate_uri_filters
 
+  enum placement: %w(left right top bottom)
+
 
   def self.service_settings(key = nil, hash=SERVICE_SETTINGS)
     return hash if key == nil
@@ -35,5 +37,18 @@ class PopupConfig < ApplicationRecord
 
       errors.add(:uri_filters, 'uri can\'t be blank') if rule['uri'].blank?
     end
+  end
+
+  def js_required_settings
+    {
+      desktop_enabled:         self.desktop_enabled,
+      desktop_show_on_leave:   self.desktop_show_on_leave,
+      desktop_show_on_timeout: self.desktop_show_on_timeout,
+      desktop_show_timeout:    self.desktop_show_timeout,
+      tablet_enabled:          self.tablet_enabled,
+      tablet_show_on_leave:    self.tablet_show_on_leave,
+      tablet_show_on_timeout:  self.tablet_show_on_timeout,
+      tablet_show_timeout:     self.tablet_show_timeout,
+    }.to_json
   end
 end

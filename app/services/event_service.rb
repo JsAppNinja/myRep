@@ -4,6 +4,7 @@ class EventService
   class << self
     def new_shop_registered(shop)
       # TODO: process async
+      shop.create_popup_config
       ScriptTagService.insert_script(shop)
     end
 

@@ -1,6 +1,6 @@
 class Shop < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable
 
 
   include ShopifyApp::Shop
@@ -12,6 +12,8 @@ class Shop < ActiveRecord::Base
   has_one  :popup_config
 
   after_save :remove_or_add_scripts, if: :enabled_changed?
+
+  validates :email, presence: true, uniqueness: false
 
   def activate_session
     session = ShopifyAPI::Session.new(shopify_domain, shopify_token)

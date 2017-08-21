@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :shops
   root to: 'static_pages#index'
-  get 'frontend', to: 'static_pages#frontend'
+  get 'slot_machine', to: 'static_pages#slot_machine'
 
   controller :sessions do
     get 'auth/shopify/callback' => :callback
@@ -39,6 +39,5 @@ Rails.application.routes.draw do
 
   scope :scripts do
     get 'js', to: 'scripts#javascript'
-    get 'css', to: 'scripts#stylesheet'
   end
 end
