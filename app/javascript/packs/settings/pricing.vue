@@ -13,90 +13,133 @@
             </v-container>
           </v-card-media>
 
-          <v-divider></v-divider>
+          <div>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4">Gamification</p>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4">Gamification</p>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4">Advanced triggers</p>
+                <ul class="mb-0">
+                  <li>Desktop exit intent</li>
+                  <li>Mobile exit intent</li>
+                  <li>Time on site trigger</li>
+                  <li>Pullout tab</li>
+                </ul>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4">Advanced triggers</p>
-              <ul class="mb-0">
-                <li>Desktop exit intent</li>
-                <li>Mobile exit intent</li>
-                <li>Time on site trigger</li>
-                <li>Pullout tab</li>
-              </ul>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4">Email integration (MailChimp, Klaviyo, Aweber)</p>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4">Email integration (MailChimp, Klaviyo, Aweber)</p>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4"> Text and colour customisation </p>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4"> Text and colour customisation </p>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4"> Fully responsive </p>
+              </v-flex>
+            </v-card-title>
+            <v-divider> </v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4"> URL specific placement or site-wide </p>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4"> Fully responsive </p>
-            </v-flex>
-          </v-card-title>
-          <v-divider> </v-divider>
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4"> URL specific placement or site-wide </p>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4"> Basic Analytics </p>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4"> Basic Analytics </p>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4"> Cookie duration settings </p>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4"> Cookie duration settings </p>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4"> Coupon code bar and countdown timer </p>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4"> Coupon code bar and countdown timer </p>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
+
+            <v-card-title>
+              <v-flex>
+                <v-icon class="not-included">close</v-icon>
+                <p class="mb-0 mr-4">Segmentation of emails</p>
+              </v-flex>
+            </v-card-title>
+            <v-divider></v-divider>
+
+            <v-card-title>
+              <v-flex>
+                <v-icon class="not-included">close</v-icon>
+                <p class="mb-0 mr-4">Multiple campaigns</p>
+              </v-flex>
+            </v-card-title>
+            <v-divider></v-divider>
+
+            <v-card-title>
+              <v-flex>
+                <v-icon class="not-included">close</v-icon>
+                <p class="mb-0 mr-4">Advanced analytics</p>
+              </v-flex>
+            </v-card-title>
+            <v-divider></v-divider>
+
+            <v-card-title>
+              <v-flex>
+                <v-icon class="not-included">close</v-icon>
+                <p class="mb-0 mr-4">Email validation</p>
+              </v-flex>
+            </v-card-title>
+            <v-divider></v-divider>
+
+            <v-card-title>
+              <v-flex>
+                <v-icon class="not-included">close</v-icon>
+                <p class="mb-0 mr-4">Custom fields</p>
+              </v-flex>
+            </v-card-title>
+          </div>
+
+          <v-btn primary flat block large class="mt-2 mb-0">order now</v-btn>
 
         </v-card>
       </v-flex>
@@ -117,131 +160,133 @@
             </v-container>
           </v-card-media>
 
-          <v-divider></v-divider>
+          <div>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4">Gamification</p>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4">Gamification</p>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4">Advanced triggers</p>
+                <ul class="mb-0">
+                  <li>Desktop exit intent</li>
+                  <li>Mobile exit intent</li>
+                  <li>Time on site trigger</li>
+                  <li>Pullout tab</li>
+                </ul>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4">Advanced triggers</p>
-              <ul class="mb-0">
-                <li>Desktop exit intent</li>
-                <li>Mobile exit intent</li>
-                <li>Time on site trigger</li>
-                <li>Pullout tab</li>
-              </ul>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4">Email integration (MailChimp, Klaviyo, Aweber)</p>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4">Email integration (MailChimp, Klaviyo, Aweber)</p>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4"> Text and colour customisation </p>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4"> Text and colour customisation </p>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4"> Fully responsive </p>
+              </v-flex>
+            </v-card-title>
+            <v-divider> </v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4"> URL specific placement or site-wide </p>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4"> Fully responsive </p>
-            </v-flex>
-          </v-card-title>
-          <v-divider> </v-divider>
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4"> URL specific placement or site-wide </p>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4"> Basic Analytics </p>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4"> Basic Analytics </p>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4"> Cookie duration settings </p>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4"> Cookie duration settings </p>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="included">check</v-icon>
+                <p class="mb-0 mr-4"> Coupon code bar and countdown timer </p>
+              </v-flex>
+            </v-card-title>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="included">check</v-icon>
-              <p class="mb-0 mr-4"> Coupon code bar and countdown timer </p>
-            </v-flex>
-          </v-card-title>
+            <v-divider></v-divider>
 
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="additional">check</v-icon>
+                <p class="mb-0 mr-4">Segmentation of emails</p>
+              </v-flex>
+            </v-card-title>
+            <v-divider></v-divider>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="additional">check</v-icon>
-              <p class="mb-0 mr-4">Segmentation of emails</p>
-            </v-flex>
-          </v-card-title>
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="additional">check</v-icon>
+                <p class="mb-0 mr-4">Multiple campaigns</p>
+              </v-flex>
+            </v-card-title>
+            <v-divider></v-divider>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="additional">check</v-icon>
-              <p class="mb-0 mr-4">Multiple campaigns</p>
-            </v-flex>
-          </v-card-title>
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="additional">check</v-icon>
+                <p class="mb-0 mr-4">Advanced analytics</p>
+              </v-flex>
+            </v-card-title>
+            <v-divider></v-divider>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="additional">check</v-icon>
-              <p class="mb-0 mr-4">Advanced analytics</p>
-            </v-flex>
-          </v-card-title>
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="additional">check</v-icon>
+                <p class="mb-0 mr-4">Email validation</p>
+              </v-flex>
+            </v-card-title>
+            <v-divider></v-divider>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="additional">check</v-icon>
-              <p class="mb-0 mr-4">Email validation</p>
-            </v-flex>
-          </v-card-title>
-          <v-divider></v-divider>
+            <v-card-title>
+              <v-flex>
+                <v-icon class="additional">check</v-icon>
+                <p class="mb-0 mr-4">Custom fields</p>
+              </v-flex>
+            </v-card-title>
+          </div>
 
-          <v-card-title>
-            <v-flex>
-              <v-icon class="additional">check</v-icon>
-              <p class="mb-0 mr-4">Custom fields</p>
-            </v-flex>
-          </v-card-title>
+          <v-btn success flat block large class="mt-2 mb-0">order now</v-btn>
 
         </v-card>
       </v-flex>
@@ -279,6 +324,10 @@
     .column > p:last-child {
       margin-bottom: 1.5em !important;
     }
+
+    i.not-included {
+      color: #B71C1C;
+    }
   }
 
   .pro-plan {
@@ -301,5 +350,14 @@
 
   i.included {
     color: #1976d2;
+  }
+
+  .btn--block {
+    border-radius: 0;
+  }
+
+  .btn--large {
+    font-size: 16px;
+    height: 60px;
   }
 </style>
