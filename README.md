@@ -49,3 +49,9 @@ $ rvmsudo thin start --ssl -p 443
 // 2 (frontend)
 $ ./bin/webpack-dev-server
 ```
+
+## Deploy
+
+A list of notes to keep in mind while pushing to heroku
+
+- after successful deploy don't forget to run `heroku run rails db:migrate` to migrate database
