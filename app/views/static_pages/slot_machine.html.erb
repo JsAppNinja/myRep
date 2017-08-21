@@ -52,46 +52,35 @@
       <% end %>
     </div>
 
-    <div id="slotMachineContainer">
-
-      <div id="ReelContainer">
-        <div id="reel1" class="reel"></div>
-        <div id="reel2" class="reel"></div>
-        <div id="reel3" class="reel"></div>
-        <div id="reelOverlay"></div>
-      </div>
-
-      <div id="loggedOutMessage" style="display: none;"><span class="large">Sorry, you have been logged off.</span><br />
-        <b>No bids</b> have been deducted from this spin, because you're not logged in anymore.
-        Please <a href="/login">login</a> and try again.
-      </div>
-
-      <div id="failedRequestMessage" style="display: none;"><span class="large">Sorry, we're unable to display your spin because your connection to our server was lost. </span><br />
-        Rest assured that your spin was not wasted.
-        Please check your connection and <a href="#" onclick="window.location.reload();">refresh</a> to try again.
-      </div>
-      <div id="betContainer">
-        <span id="lastWin"></span>
-        <span id="credits"><%= credits %></span>
-        <span id="bet"><%= minBet %></span>
-        <span id="dayWinnings"><%= dayWinnings %></span>
-        <span id="lifetimeWinnings"><%= lifetimeWinnings %></span>
-        <div id="betSpinUp"></div>
-        <div id="betSpinDown"></div>
-      </div>
-
-      <div id="spinButton"></div>
-    </div>
+    <div id="SlotMachine"></div>
 
     <div id="soundOffButton"></div>
 
     <script type="text/javascript">
+      // we don't want PopupActivation to be created until our slot machine won't be loaded
+      window.slotMachineLoaded = false;
+
       var machineName = '<%= machineName %>';
       var minBet = <%= minBet %>;
       var maxBet = <%= maxBet %>;
       var numIconsPerReel = <%= numIconsPerReel %>;
       var windowID = <%= windowID %>;
+      var token = '<%= @token %>';
+
+      var shop_name = document.referrer.split("/")[2],
+          url = document.referrer.split(shop_name)[1];
+
+
+      function params() {
+        return {
+            token:         window.token,
+            session_token: window.session_token,
+            url:           url,
+            shop_name:     shop_name
+        }
+      }
+
     </script>
-    <%= javascript_include_tag 'frontend' %>
+    <%= javascript_pack_tag 'slot_machine' %>
   </div>
 </div>

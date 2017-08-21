@@ -1,5 +1,5 @@
 class StaticPagesController < ApplicationController
-  skip_before_action :authenticate_shop, only: :login
+  skip_before_action :authenticate_shop, only: [:login, :slot_machine]
 
   def index
     render :index, layout: 'application'
@@ -9,10 +9,10 @@ class StaticPagesController < ApplicationController
     render :login, layout: 'static'
   end
 
-  def index
-  end
+  def slot_machine
+    @token = SecureRandom.base64(100)
+    session[:token] = @token
 
-  def frontend
-    render 'frontend', layout: 'frontend'
+    render 'slot_machine', layout: 'frontend'
   end
 end

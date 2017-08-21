@@ -7,16 +7,24 @@ class ApplicationController < ActionController::Base
 
 
   def authenticate_shop
-    return if shop_signed_in?
+    if current_shop.blank?
+      redirect_to shop_login_path
+    elsif params[:shop].class == String &&
+         current_shop.shopify_domain != params[:shop]
+      sign_out(current_shop)
+      redirect_to shop_login_path
+    end
+  end
+
+  def shop_login_path
     if params[:shop].present?
-      redirect_to '/auth/shopify?shop=' + params[:shop]
+      '/auth/shopify?shop=' + params[:shop]
     else
-      redirect_to ENV['APP_STORE_URL'] || login_path
+      ENV['APP_STORE_URL'] || login_path
     end
   end
 
   def respond_with_errors(resource)
     render json: { errors: resource.errors.full_messages }, status: 422
   end
-
 end

@@ -1,24 +1,57 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Installation
 
-Things you may want to cover:
+Clone this repo and run following commands:
 
-* Ruby version
+```
+$ bundle install
+$ ./bin/yarn install
+```
 
-* System dependencies
+## Using
 
-* Configuration
+### Starting dev server without SSL
 
-* Database creation
+If you have installed foreman, you can use Procfile to configure application and simply run `foreman start`.
 
-* Database initialization
+But in development foreman blocks `binding.pry` code from executing, and you will never 
+access the `binding.pry` point from the console.
 
-* How to run the test suite
+In case of that just run in two consoles/tabs following commands:
 
-* Services (job queues, cache servers, search engines, etc.)
+```
+// 1 (backend)
+$ rails s
 
-* Deployment instructions
+// 2 (frontend)
+$ ./bin/webpack-dev-server
+```
 
-* ...
+### Starting dev server with SSL
+
+To test/use slotmachine on some site you'll need to start both servers using ssl, since shopify 
+blocks non-htttps requests. To do this, you need to find `config/webpacker.yml` file 
+and set `https:` option to `true`:
+
+```yaml
+development:
+  dev_server:
+    https: true
+```
+
+Only after this you can run the following commands:
+
+```
+// 1 (backend)
+$ rvmsudo thin start --ssl -p 443
+
+// 2 (frontend)
+$ ./bin/webpack-dev-server
+```
+
+## Deploy
+
+A list of notes to keep in mind while pushing to heroku
+
+- after successful deploy don't forget to run `heroku run rails db:migrate` to migrate database
