@@ -3,11 +3,9 @@ class ScriptsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def javascript
+    @shop = Shop.find_by(shopify_domain: params[:shop])
+
     render inline: (render_to_string('embedded', formats: [:js, :erb])),
             content_type: 'application/javascript'
-  end
-
-  def stylesheet
-    render 'embedded', formats: [:css], content_type: 'text/css; charset=utf-8'
   end
 end

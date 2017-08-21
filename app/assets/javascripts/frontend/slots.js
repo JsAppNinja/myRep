@@ -22,7 +22,7 @@ var slotMachine = {
 
 	winningsFormatPrefix: '',  // If winnings are "money", set prefix to be '$', '£', etc. If everything is unit-less, leave as is.
 
-	spinURL: '/api/v1/spins', // point to the server component to call to get spin results.
+	spinURL: '/api/v1/popup_submits', // point to the server component to call to get spin results.
 
 	curBet: minBet,
 	soundEnabled: true,
@@ -144,13 +144,17 @@ var slotMachine = {
 		}
 
 		var FirstReelTimeoutHit = false;
-		var spinData = null;
+		var spinData = window.spinData;
+
 		window.setTimeout(function(){ FirstReelTimeoutHit = true; if (spinData != null) { fnStopReelsAndEndSpin(); } }, slotMachine.firstReelStopTime);
 
 		$.ajax({
 			url: slotMachine.spinURL,
 			type: "POST",
-			data: { bet : slotMachine.curBet, windowID: windowID, machine_name: machineName},
+			data: Object.assign(
+        { bet : slotMachine.curBet, windowID: windowID, machine_name: machineName },
+        window.payload_data
+      ),
 			dataType: "json",
 			timeout: 10000,
 			success: function(data){
@@ -166,9 +170,12 @@ var slotMachine = {
 				spinData = data;
 				if (FirstReelTimeoutHit == true) { fnStopReelsAndEndSpin(); }
 			},
-			error: function() {
+			error: function(data) {
 				slotMachine.abort_spin_abruptly();
-				$('#failedRequestMessage').show();
+
+				var $customError = $('#customError');
+				$customError.html(JSON.parse(data.responseText).join('<br>'));
+				$customError.show();
 			}
 		});
 

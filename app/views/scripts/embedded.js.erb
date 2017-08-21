@@ -1,38 +1,168 @@
 (function(){
   console.log('loaded.');
 
+  // so that the container.vue can signalize whether he is loaded or not
+  // because we don't want sent something to not yet loaded vue component
+  window.slotMachineLoaded = false;
+  function isLoaded(event) {
+    window.slotMachineLoaded = event.data
+  }
+  addEventListener("message", isLoaded, false);
 
+
+  var triggers       = JSON.parse('<%= raw(@shop.popup_config.js_required_settings) %>'),
+      placement      = '<%= @shop.popup_config.placement %>',
+      isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+  // interrupts rendering iframe when slot machine not enabled on current device
+  if (isMobileDevice) {
+    if (triggers.tablet_enabled == false)
+      return false;
+  }
+  else {
+    if (triggers.desktop_enabled == false)
+      return false;
+  }
+
+
+  // main logic to render slot machine properly
   var container = document.createElement("div");
-  container.id = "slot-machine";
-  container.height = window.innerHeight;
-  container.width = 800;
 
-  var close = document.createElement("span");
-  close.id = 'close-icon';
+  var viewport_width, viewport_height = window.innerHeight;
+
+  if (["top", "bottom"].indexOf(placement) !== -1) {
+    viewport_width  = window.innerWidth;
+
+    if (placement === "top")
+      container.style.top = -(viewport_height + 100) + 'px';
+    else
+      container.style.bottom = -(viewport_height + 100) + 'px';
+  }
+  else {
+    viewport_width = 880
+  }
+
+  container.id     = "slot-machine";
+  container.height = viewport_height;
+  container.width  = viewport_width;
+
+  container.classList.add('slot-machine-' + placement);
+
+
+  var close       = document.createElement("span");
+  close.id        = 'close-icon';
   close.innerHTML = '&times;';
 
-  var iframe = document.createElement("iframe")
-  iframe.height = window.innerHeight;
-  iframe.width = 800;
-  iframe.src = '<%= ENV["SCRIPTS_HOST"] %>/frontend';
+
+  var iframe    = document.createElement("iframe");
+  iframe.height = viewport_height;
+  iframe.width  = viewport_width;
+  iframe.src    = '<%= ENV["SCRIPTS_HOST"] %>/slot_machine';
+
 
   container.append(close);
   container.append(iframe);
 
+
   var style = document.createElement("link", {type: 'text/css'});
   style.rel = 'stylesheet';
-  style.href = '<%= ENV["SCRIPTS_HOST"] %>/scripts/css';
+  style.href = '<%= ENV["SCRIPTS_HOST"] + asset_path('embedded.css.scss') %>';
   document.body.appendChild(style);
   document.body.appendChild(container);
 
-  document.body.addEventListener('mouseleave', function(){
-    if (!window.slotsShown){
+
+  function showSlotMachine() {
+    if (window.slotMachineLoaded == false) { return; }
+
+    if (!window.slotsShown && setCookie()){
+      var serviceParams = {
+        url:       window.location.pathname,
+        shop_name: window.location.hostname
+      };
+
+      iframe.contentWindow.postMessage({
+            method: "createPopupActivation()",
+            params: serviceParams
+          }, "*");
+
       container.classList.add('show');
-    };
+      container.removeAttribute('style'); // for dynamic offset of top and bottom placements
+      document.body.classList.add('slot-machine-active');
+    }
     window.slotsShown = true;
-  });
+  }
+
+
   close.addEventListener('click', function(){
     container.classList.remove('show');
+
+    // removes class that prevents scrolling
+    document.body.classList.remove('slot-machine-active');
+
+    if (placement === "top")
+      container.style.top = -(viewport_height + 100) + 'px';
+    if (placement === "bottom")
+      container.style.bottom = -(viewport_height + 100) + 'px';
   });
+
+
+  // listeners
+
+
+  if (isMobileDevice) {
+    if (<%= @shop.popup_config.tablet_show_on_leave %>) {
+      var last_scroll = 0;
+
+      window.addEventListener('scroll', function(event){
+        var offset = window.pageYOffset || document.documentElement.scrollTop;
+        if (offset < last_scroll)
+          showSlotMachine();
+        last_scroll = offset
+      });
+    }
+
+    if (<%= @shop.popup_config.tablet_show_on_timeout %>) {
+      setTimeout(function(){ showSlotMachine(); }, <%= @shop.popup_config.tablet_show_timeout * 1000 %>)
+    }
+  }
+  else {
+    if (<%= @shop.popup_config.desktop_show_on_leave %>) {
+      document.body.addEventListener('mouseleave', function(event){
+        if (event.clientY < 0)
+          showSlotMachine();
+      });
+    }
+
+    if (<%= @shop.popup_config.desktop_show_on_timeout %>) {
+      setTimeout(function(){ showSlotMachine(); }, <%= @shop.popup_config.desktop_show_timeout * 1000 %>)
+    }
+  }
+
+
+  function setCookie() {
+    var version = <%= @shop.popup_config.version %>,
+        cookieKey = "<%= "slotmachine_#{@shop.id}_version" %>",
+        cookedVersion = getCookie(cookieKey);
+
+    if (cookedVersion && version == cookedVersion) {
+      return false
+    }
+    else {
+      // reset cookie first
+      document.cookie = cookieKey + '=';
+      newCookie = cookieKey + '=' + version;
+      document.cookie = newCookie;
+
+      return true
+    }
+  }
+
+
+  function getCookie(name) {
+    var matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+  }
 
 }).call(this);

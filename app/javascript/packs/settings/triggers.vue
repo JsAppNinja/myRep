@@ -24,7 +24,7 @@
 
         <v-card class="card-last-child-padd" v-if="!component_preloader">
           <v-card-title>
-            <v-layout row-md flex-row column child-flex-md>
+            <v-layout row-md flex-row child-flex-md>
               <v-flex md6 class="pb-3">
                 <v-switch
                   label="Show on desktop computers"
@@ -111,6 +111,28 @@
                 </v-layout>
               </v-flex>
             </v-layout>
+            <v-layout flex-row row-sm column child-flex-sm>
+              <v-flex md3>
+                <v-radio color="info" hide-details label="Left"
+                         v-model="triggers.placement" value="left">
+                </v-radio>
+              </v-flex>
+              <v-flex md3>
+                <v-radio color="info" hide-details label="Right"
+                         v-model="triggers.placement" value="right">
+                </v-radio>
+              </v-flex>
+              <v-flex md3>
+                <v-radio color="info" hide-details label="Top"
+                         v-model="triggers.placement" value="top">
+                </v-radio>
+              </v-flex>
+              <v-flex md3>
+                <v-radio color="info" hide-details label="Bottom"
+                         v-model="triggers.placement" value="bottom">
+                </v-radio>
+              </v-flex>
+            </v-layout>
           </v-card-title>
 
           <v-divider></v-divider>
@@ -133,7 +155,7 @@
 
               <v-flex sm12>
                 <p>Show it again to everyone no matter how many days have passed.</p>
-                <v-btn info small class="ma-0">Reset cookies for all users</v-btn>
+                <v-btn info small class="ma-0" light v-bind:disabled="disable_cookies_reset" @click="resetCookies()">Reset cookies for all users</v-btn>
               </v-flex>
             </v-layout>
           </v-card-title>
@@ -226,7 +248,13 @@
 
 <script>
   export default {
-    props: ['triggers', 'service_fields', 'component_preloader'],
+    data: function () {
+      return {
+        disable_cookies_reset: false
+      }
+    },
+
+    props: ['triggers', 'service_fields', 'component_preloader', 'showSnackbar'],
 
     methods: {
       removeUriRule: function (uriIndex) {
@@ -246,14 +274,40 @@
           'new_draft_rule',
           Object.assign({}, this.service_fields.uri_filters.new_rule)
         );
+      },
+
+      resetCookies: function () {
+        this.disable_cookies_reset = true;
+        this.$http
+            .get('/api/internal/v1/popup_config/update_version')
+            .then(
+                resp => {
+                  this.$parent.showSnackbar({type: 'success', text: "Successfully reset!"});
+                },
+                err => {
+                  console.log(err)
+                }
+            ).then(() => { this.disable_cookies_reset = false })
       }
     }
   }
 </script>
 
 <style scoped>
+  .flex-row {
+    width: 100%;
+  }
+
   .after-switch-width {
     max-width: 90px !important;
     min-width: 90px !important;
+  }
+
+  button.theme--light {
+    color: #fff !important;
+  }
+
+  button.theme--light[disabled="disabled"] {
+   color: rgba(0, 0, 0, .26) !important;
   }
 </style>

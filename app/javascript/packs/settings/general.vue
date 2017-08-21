@@ -11,18 +11,30 @@
           <v-card-title>
             <v-layout row-sm flex-row column child-flex-sm>
               <v-flex sm5>
-                <v-text-field name="input-1" label="Shop URL" v-model="general.shopUrl"></v-text-field>
+                <v-text-field name="input-1" label="Shop URL" v-model="general.shopify_domain" disabled></v-text-field>
               </v-flex>
               <v-flex sm5 offset-sm1>
-                <v-text-field name="input-1" label="Shop ID" v-model="general.shopId"></v-text-field>
+                <v-text-field name="input-1" label="Shop ID" v-model="general.id" disabled></v-text-field>
               </v-flex>
             </v-layout>
             <v-layout row-sm flex-row column child-flex-sm>
               <v-flex sm5>
-                <v-switch label="Enable wheel" v-model="general.enabled" color="info" hide-details></v-switch>
+                <v-switch label="Enable wheel"
+                          v-bind:disabled="!general.resolved || freeze_switch"
+                          v-model="general.enabled"
+                          @click="switchState()"
+                          color="info"
+                          hint="This value updates on every change"
+                          persistent-hint
+                ></v-switch>
               </v-flex>
               <v-flex sm5 offset-sm1>
-                <v-btn info flat class="preview-btn">Live Preview</v-btn>
+                <v-btn info flat class="preview-btn"
+                       v-bind:disabled="!general.resolved"
+                       @click="openLink()"
+                >
+                  Live Preview
+                </v-btn>
               </v-flex>
             </v-layout>
           </v-card-title>
@@ -36,19 +48,23 @@
             <v-layout row-sm column child-flex-sm class="analytics flex-row">
               <v-flex sm4>
                 <div class="subheading">Displayed</div>
-                <h6 class="primary--text">{{general.analytics.displayed}}</h6>
+                <h6 class="primary--text" v-if="general.resolved">{{general.analytics.displayed}}</h6>
+                <h6 class="primary--text" v-if="!general.resolved">...</h6>
               </v-flex>
               <v-flex sm4>
                 <div class="subheading">Spinned</div>
-                <h6 class="primary--text">{{general.analytics.spinned}}</h6>
+                <h6 class="primary--text" v-if="general.resolved">{{general.analytics.spinned}}</h6>
+                <h6 class="primary--text" v-if="!general.resolved">...</h6>
               </v-flex>
               <v-flex sm4>
                 <div class="subheading">Rejected</div>
-                <h6 class="primary--text">{{general.analytics.rejected}}</h6>
+                <h6 class="primary--text" v-if="general.resolved">{{general.analytics.rejected}}</h6>
+                <h6 class="primary--text" v-if="!general.resolved">...</h6>
               </v-flex>
               <v-flex sm4>
                 <div class="subheading">Conversion rate</div>
-                <h6 class="primary--text">{{general.analytics.conversionRate}} %</h6>
+                <h6 class="primary--text" v-if="general.resolved">{{general.analytics.conversion_rate}} %</h6>
+                <h6 class="primary--text" v-if="!general.resolved">... %</h6>
               </v-flex>
             </v-layout>
           </v-card-title>
@@ -60,7 +76,47 @@
 
 <script>
   export default {
-    props: ['general']
+    props: ['general'],
+
+    data: function() {
+      return {
+        freeze_switch: false
+      }
+    },
+
+    methods: {
+      switchState: function () {
+        if (this.general.resolved === true) {
+          if (this.freeze_switch === true) { return }
+
+          this.freeze_switch   = true;
+          this.general.enabled = !this.general.enabled;
+
+          this.$http
+              .put(
+                "/api/internal/v1/shop",
+                { shop: this.general }
+              )
+              .then(
+                resp => {
+                  this.freeze_switch = false;
+                  this.general.enabled = resp.body.enabled;
+
+                  var snackbar = {
+                    type: this.general.enabled ? "success" : "warning",
+                    text: this.general.enabled ? "Successfully enabled!" : "Slot machine was disabled"
+                  };
+
+                  this.$parent.showSnackbar(snackbar);
+                },
+                err  => { console.log(err) }
+              )
+        }
+      },
+      openLink: function () {
+        window.open('https://' + this.general.shopify_domain, '_blank')
+      }
+    }
   }
 </script>
 

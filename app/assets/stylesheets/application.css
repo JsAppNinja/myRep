@@ -74,3 +74,8 @@ table.table tbody tr[active] {
 .flex-row {
   flex: 0 1 100% !important;
 }
+
+div.snack--active.warning {
+  background-color : #ffb100 !important;
+  border-color     : #ffb100 !important;
+}

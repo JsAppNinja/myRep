@@ -1,0 +1,32 @@
+// main iframe functions
+window.addEventListener('message', function(event) {
+
+  // a list of "public" functions to call from anywhere ()
+  var publicFunctions = ["createPopupActivation()"];
+
+
+  var index = publicFunctions.indexOf(event.data.method);
+
+
+  // calling iframe functions which present in publicFunctions
+  if (index >= 0) {
+    eval(publicFunctions[index]);
+  }
+
+
+  function createPopupActivation() {
+
+    if (!window.slotMachineLoaded) { return false }
+
+    window.slotMachine.sendPopupActivation(
+      "<%= ENV["SCRIPTS_HOST"] %>" + "/api/v1/popup_activation",
+      {
+        popup_activation: {
+          token:     token,
+          url:       event.data.params.url,
+          shop_name: event.data.params.shop_name
+        }
+      }
+    );
+  }
+});

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :shops
   root to: 'static_pages#index'
-  get 'frontend', to: 'static_pages#frontend'
+  get 'slot_machine', to: 'static_pages#slot_machine'
 
   controller :sessions do
     get 'auth/shopify/callback' => :callback
@@ -21,13 +21,17 @@ Rails.application.routes.draw do
   namespace :api do
     scope 'v1' do
       resources :popup_submits, only: [:create]
-      resource :popup_activation, only: [:create]
-      resource :spins, only: [:create]
+      resource  :popup_activation, only: [:create]
+      resource  :spins, only: [:create]
     end
     namespace :internal do
       namespace :v1 do
-        resource :popup_config, only: [:show, :update]
         resources :slot_items, only: [:index, :update]
+        resource :popup_config, only: [:show, :update] do
+          get 'update_version', to: 'popup_configs#update_version'
+        end
+
+        resource :shop, only: [:show, :update]
       end
     end
   end
@@ -35,6 +39,5 @@ Rails.application.routes.draw do
 
   scope :scripts do
     get 'js', to: 'scripts#javascript'
-    get 'css', to: 'scripts#stylesheet'
   end
 end
