@@ -4,15 +4,16 @@
     <v-toolbar class="primary" dark fixed>
       <v-container>
         <v-toolbar-title>
-          <transition name="back-btn">
+          SlotMachine
+
+          <transition name="header-btn">
             <v-btn dark small primary flat class="header-btn white--text" v-if="show_plans" @click="show_plans = !show_plans">
-              <v-icon class="white--text">chevron_left</v-icon> Back
+              <v-icon class="white--text">chevron_left</v-icon>
+              Back
             </v-btn>
           </transition>
 
-          SlotMachine
-
-          <transition name="slide-fade">
+          <transition name="header-btn" appear>
             <v-btn dark small class="red darken-1 header-btn header-upgrade-btn" v-if="show_settings" @click="show_settings = !show_settings">
               Upgrade
             </v-btn>
@@ -82,14 +83,6 @@
 
 
         <!-- Other stuff -->
-
-
-        <!-- Save button -->
-
-        <v-btn fab dark large primary class="save-button" @click="updateSettings()">
-          <v-progress-circular indeterminate class="white--text" v-if="!data_saved"></v-progress-circular>
-          <v-icon dark v-if="data_saved">save</v-icon>
-        </v-btn>
       </main>
     </transition>
 
@@ -100,6 +93,15 @@
         <Pricing></Pricing>
       </main>
     </transition>
+
+    <!-- Save button -->
+
+    <v-fab-transition appear>
+      <v-btn fab dark large primary fixed bottom right @click="updateSettings()" v-show="show_settings">
+        <v-progress-circular indeterminate class="white--text" v-if="!data_saved"></v-progress-circular>
+        <v-icon dark v-if="data_saved">save</v-icon>
+      </v-btn>
+    </v-fab-transition>
 
 
     <!-- Snackbar -->
@@ -310,20 +312,16 @@ export default {
   .header-btn {
     top: -1px;
     margin: 0;
-  }
-
-  .header-upgrade-btn {
-    top: 0px;
     float: right;
   }
 
-  .save-button {
-    position: fixed;
-    right:    0;
-    bottom:   0;
+  .header-upgrade-btn {
+    top: 0;
   }
 
   /* transitions */
+
+  /* for content */
 
   .slide-fade-enter-active {
     transition: all .3s ease;
@@ -343,21 +341,43 @@ export default {
     opacity: 0;
   }
 
-  .back-btn-enter-active {
+  /* for header buttons */
+
+  .header-btn-enter-active {
     transition: all .3s ease;
   }
 
-  .back-btn-leave-active {
+  .header-btn-leave-active {
     transition: all .3s ease;
   }
 
-  .back-btn-enter{
+  .header-btn-enter {
     transform: translateX(-30px);
     opacity: 0;
   }
 
-  .back-btn-leave-to {
+  .header-btn-leave-to {
     transform: translateX(30px);
+    opacity: 0;
+  }
+
+  /* for save button */
+
+  .save-btn-enter-active {
+    transition: all .3s ease;
+  }
+
+  .save-btn-leave-active {
+    transition: all .3s ease;
+  }
+
+  .save-btn-enter{
+    transform: rotate(-90deg);
+    opacity: 0;
+  }
+
+  .save-btn-leave-to {
+    transform: rotate(90deg);
     opacity: 0;
   }
 </style>
