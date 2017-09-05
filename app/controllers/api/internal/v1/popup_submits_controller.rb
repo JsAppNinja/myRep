@@ -5,7 +5,11 @@ module Api
 
         def index
           popup_submits = PopupSubmit.where(shop_id: current_shop.id)
-          paginate popup_submits, per_page: PopupSubmit::PER_PAGE
+                                     .order(created_at: :desc)
+                                     .page(params[:page] ||= 1)
+                                     .per(params[:per_page] ||= 25)
+
+          render json: popup_submits, meta: pagination_attributes(popup_submits)
         end
 
 
@@ -19,6 +23,20 @@ module Api
 
           popup_submit.destroy
           head :ok
+        end
+
+
+        private
+
+
+        def pagination_attributes(collection)
+          {
+            current_page: collection.current_page,
+            next_page:    collection.last_page?,
+            prev_page:    collection.first_page?,
+            total_count:  collection.total_count,
+            per_page:     params[:per_page]
+          }
         end
       end
     end

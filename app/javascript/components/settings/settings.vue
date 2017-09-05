@@ -79,7 +79,7 @@
         </v-container>
 
         <!-- Collected emails -->
-        <CollectedEmails v-bind:collected_emails="emails"></CollectedEmails>
+        <CollectedEmails></CollectedEmails>
 
 
         <!-- Other stuff -->
@@ -194,27 +194,6 @@ export default {
           { type: "Coupon", label: "Winner6", code: "000-000-000", gravity: 10 }
         ],
         allowedTypes: ["Coupon", "Image"]
-      },
-      emails: {
-        headers: [
-          { text: "№",     value: "index", align: 'left',  sortable: false },
-          { text: "Email", value: "email", align: 'left',  sortable: false },
-          { text: "Page",  value: "page",  align: 'left', sortable: false }
-        ],
-        items: [
-          { email: "example@user1.com",  page: "/clothes" },
-          { email: "example@user2.com",  page: "/smartphones" },
-          { email: "example@user3.com",  page: "/clothes" },
-          { email: "example@user4.com",  page: "/accessories" },
-          { email: "example@user5.com",  page: "/smartphones" },
-          { email: "example@user6.com",  page: "/clothes" },
-          { email: "example@user7.com",  page: "/accessories" },
-          { email: "example@user8.com",  page: "/clothes" },
-          { email: "example@user9.com",  page: "/clothes" },
-          { email: "example@user10.com", page: "/accessories" },
-          { email: "example@user11.com", page: "/accessories" },
-          { email: "example@user12.com", page: "/smartphones" }
-        ]
       }
     }
   },
@@ -303,6 +282,10 @@ export default {
 
   main {
     padding-top: 80px;
+
+    .container:last-child {
+      margin-bottom: 100px !important;
+    }
   }
 
   .header-btn > .btn__content > i {
