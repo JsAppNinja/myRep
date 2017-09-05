@@ -39,6 +39,7 @@ gem 'devise'
 gem 'thin'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'validates_email_format_of'
+gem 'kaminari'
 
 gem 'rollbar'
 
