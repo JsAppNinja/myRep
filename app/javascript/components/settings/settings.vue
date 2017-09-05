@@ -119,13 +119,13 @@
 </template>
 
 <script>
-import General         from './settings/general'
-import Triggers        from './settings/triggers'
-import Campaigns       from './settings/campaigns'
-import Branding        from './settings/branding'
-import SlotSlices      from './settings/slot_slices'
-import CollectedEmails from './settings/collected_emails'
-import Pricing         from './settings/pricing'
+import General         from './_general'
+import Triggers        from './_triggers'
+import Campaigns       from './_campaigns'
+import Branding        from './_branding'
+import SlotSlices      from './_slot_slices'
+import CollectedEmails from './_collected_emails'
+import Pricing         from './_pricing'
 
 export default {
   components: {

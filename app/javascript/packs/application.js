@@ -8,7 +8,7 @@
 // layout file, like app/views/layouts/application.html.erb
 
 import Vue         from 'vue'
-import Settings    from './settings.vue'
+import Settings    from '../components/settings/settings.vue'
 import Vuetify     from 'vuetify'
 import VueResource from 'vue-resource'
 
