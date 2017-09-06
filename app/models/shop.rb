@@ -4,6 +4,7 @@ class Shop < ActiveRecord::Base
 
   has_many :popup_activations
   has_many :popup_submits
+  has_many :slot_items
   has_one  :popup_config
 
   after_save :remove_or_add_scripts, if: :enabled_changed?

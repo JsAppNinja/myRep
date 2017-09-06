@@ -78,4 +78,16 @@ ActiveRecord::Schema.define(version: 20170818083440) do
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
   end
 
+  create_table "slot_items", force: :cascade do |t|
+    t.integer "shop_id", null: false
+    t.string "title"
+    t.string "item_type"
+    t.string "shopify_product_id"
+    t.string "shopify_price_rule_id"
+    t.string "coupon"
+    t.string "image"
+    t.string "product_url"
+    t.index ["shop_id"], name: "index_slot_items_on_shop_id"
+  end
+
 end

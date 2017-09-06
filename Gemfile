@@ -40,6 +40,8 @@ gem 'thin'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'validates_email_format_of'
 
+gem 'carrierwave', '1.1.0'
+gem 'carrierwave-aws'
 gem 'rollbar'
 
 group :development, :test do
