@@ -24,7 +24,7 @@
 
         <v-card class="card-last-child-padd" v-if="!component_preloader">
           <v-card-title>
-            <v-layout row-md flex-row child-flex-md>
+            <v-layout row-md flex-row column child-flex-md>
               <v-flex md6 class="pb-3">
                 <v-switch
                   label="Show on desktop computers"
