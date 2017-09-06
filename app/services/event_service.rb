@@ -4,7 +4,8 @@ class EventService
   class << self
     def new_shop_registered(shop)
       # TODO: process async
-      shop.create_popup_config
+      PopupConfigs::Default.create_popup_config(shop)
+      SlotItems::Default.create_slot_items(shop)
       ScriptTagService.insert_script(shop)
     end
 

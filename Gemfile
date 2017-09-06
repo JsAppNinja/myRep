@@ -43,6 +43,7 @@ gem 'validates_email_format_of'
 gem 'carrierwave', '1.1.0'
 gem 'carrierwave-aws'
 gem 'rollbar'
+gem 'simplecov', :require => false, :group => :test
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
