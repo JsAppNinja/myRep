@@ -1,6 +1,5 @@
 class Subscription < ApplicationRecord
-  BASIC_PLAN = 'basic'
-  PRO_PLAN   = 'pro'
+  PLANS = %w(basic pro)
 
   STRIPE  = 'stripe'
   SHOPIFY = 'shopify'

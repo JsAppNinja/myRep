@@ -5,13 +5,13 @@ module Api
         skip_before_action :verify_authenticity_token
 
         def create
-          current_shop.activate_session
           test_mode = ENV['TEST_SUBSCRIPTION'] || false
+          plan      = subscriptions_params[:plan_name]
 
-          if subscriptions_params[:plan_name] == Subscription::BASIC_PLAN
-            price = ENV['BASIC_PLAN_PRICE']
-          elsif subscriptions_params[:plan_name] == Subscription::PRO_PLAN
-            price = ENV['PRO_PLAN_PRICE']
+          if Subscription::PLANS.include?(plan)
+            price = ENV["#{plan.upcase}_PLAN_PRICE"]
+          else
+            render json: { errors: ['Unknown plan'] } and return
           end
 
           charge = ShopifyAPI::RecurringApplicationCharge.new(
@@ -22,15 +22,9 @@ module Api
           )
 
           if charge.save
-            Subscription.create(
-              plan_name: charge.name,            price: charge.price,
-              charge_id: charge.id,              api_client_id: charge.api_client_id,
-              status: charge.status,             billing_on: charge.billing_on,
-              activated_on: charge.activated_on, shop_id: current_shop.id
-            )
-            redirect_to charge.confirmation_url
+            render json: { confirmation_url: charge.confirmation_url }
           else
-            respond_with_errors(charge)
+            render json: { errors: charge.errors.full_messages }, status: 422
           end
         end
 

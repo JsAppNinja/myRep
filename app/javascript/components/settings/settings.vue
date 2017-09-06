@@ -90,7 +90,7 @@
     <!-- bying page -->
     <transition name="slide-fade" v-on:after-leave="show_settings = !show_settings">
       <main v-if="show_plans">
-        <Pricing></Pricing>
+        <Pricing v-bind:general="general"></Pricing>
       </main>
     </transition>
 
@@ -146,7 +146,7 @@ export default {
       data_loaded:    false,
       data_saved:     true,
       snackbar: {
-        show: false,
+        show: false
       },
       show_plans:    false,
       show_settings: true,
