@@ -1,9 +1,9 @@
 class Subscription < ApplicationRecord
-  BASIC_PLAN = 'Basic'
-  PRO_PLAN = 'Pro'
+  BASIC_PLAN = 'basic'
+  PRO_PLAN   = 'pro'
 
-  STRIPE = 'Stripe'
-  SHOPIFY = 'Shopify'
+  STRIPE  = 'stripe'
+  SHOPIFY = 'shopify'
 
   belongs_to :shop
 end
