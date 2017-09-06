@@ -11,23 +11,21 @@ Rails.application.routes.draw do
     get 'login', to: :login
   end
 
-  # TODO: move to "internal"
-  scope :api do
-    scope 'v1' do
-      resources :popup_submits, only: [:destroy, :index]
-    end
-  end
-
   namespace :api do
     scope 'v1' do
-      resources :popup_submits, only: [:create]
+      resources :popup_submits,    only: [:create]
       resource  :popup_activation, only: [:create]
-      resource  :spins, only: [:create]
     end
+
     namespace :internal do
       namespace :v1 do
+        resources :slot_items, only: [:index, :update]
         resource :popup_config, only: [:show, :update] do
           get 'update_version', to: 'popup_configs#update_version'
+        end
+
+        resources :popup_submits, only: [:destroy, :index] do
+          get 'save_as_csv', to: 'popup_submits#save_as_csv', on: :collection
         end
 
         resource :shop, only: [:show, :update]

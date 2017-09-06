@@ -31,9 +31,9 @@
       });
     </script>
 
-    <% if content_for?(:javascript) %>
+    <% if content_for?(:components) %>
       <div id="ContentForJavascript" data-turbolinks-temporary>
-        <%= yield :javascript %>
+        <%= yield :components %>
       </div>
     <% end %>
   </body>
