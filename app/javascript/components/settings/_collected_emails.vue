@@ -9,6 +9,19 @@
       </v-flex>
       <v-flex sm9>
         <v-card>
+          <v-card-title class="primary white--text pa-0">
+            <v-spacer></v-spacer>
+            <v-menu offset-y left>
+              <v-btn icon slot="activator" dark>
+                <v-icon>more_vert</v-icon>
+              </v-btn>
+              <v-list>
+                <v-list-tile>
+                  <v-list-tile-title @click="saveAsCSV()">Save as .csv</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
+          </v-card-title>
           <v-data-table
             v-bind:headers="collected_emails.headers"
             :items="collected_emails.items"
@@ -89,6 +102,23 @@
 
       prevPage: function () {
         this.getPopupSubmits(this.meta.current_page - 1, this.per_page)
+      },
+
+      saveAsCSV: function () {
+        this.$http
+            .get("/api/internal/v1/popup_submits/save_as_csv")
+            .then(resp => {
+
+              // code below was taken from:
+              // https://github.com/pagekit/vue-resource/issues/285#issuecomment-245779740
+
+              var headers = resp.headers;
+              var blob = new Blob([resp.data],{type:headers['content-type']});
+              var link = document.createElement('a');
+              link.href = window.URL.createObjectURL(blob);
+              link.download = resp.headers.map['FILENAME'];
+              link.click();
+            })
       },
 
       getPopupSubmits: function(page, per_page) {

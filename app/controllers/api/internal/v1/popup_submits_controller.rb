@@ -26,6 +26,17 @@ module Api
         end
 
 
+        def save_as_csv
+          popup_submits = PopupSubmit.where(shop_id: current_shop.id).order(email: :asc)
+          filename = "collected-emails-#{Time.now.utc.strftime('%Y%m%d%H%M%S')}.csv"
+
+          # front-end saves file with the name set in headers
+          # but just in case lets specify it in send_data() too
+          response.headers["FILENAME"] = filename
+          send_data popup_submits.to_csv, filename: filename
+        end
+
+
         private
 
 

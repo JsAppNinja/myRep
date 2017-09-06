@@ -23,7 +23,9 @@ Rails.application.routes.draw do
           get 'update_version', to: 'popup_configs#update_version'
         end
 
-        resources :popup_submits, only: [:destroy, :index]
+        resources :popup_submits, only: [:destroy, :index] do
+          get 'save_as_csv', to: 'popup_submits#save_as_csv', on: :collection
+        end
 
         resource :shop, only: [:show, :update]
       end
