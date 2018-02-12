@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170818083440) do
+ActiveRecord::Schema.define(version: 20170823120155) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,6 +88,19 @@ ActiveRecord::Schema.define(version: 20170818083440) do
     t.string "image"
     t.string "product_url"
     t.index ["shop_id"], name: "index_slot_items_on_shop_id"
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.string "plan_name"
+    t.string "price"
+    t.string "charge_id", null: false
+    t.string "api_client_id", null: false
+    t.string "status"
+    t.string "billing_on"
+    t.string "activated_on"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "shop_id", null: false
   end
 
 end

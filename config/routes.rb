@@ -29,6 +29,7 @@ Rails.application.routes.draw do
         end
 
         resource :shop, only: [:show, :update]
+        resource :subscription, only: [:create, :destroy]
       end
     end
   end
