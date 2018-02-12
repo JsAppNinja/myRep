@@ -139,7 +139,7 @@
             </v-card-title>
           </div>
 
-          <v-btn primary flat block large class="mt-2 mb-0">order now</v-btn>
+          <v-btn primary flat block large class="mt-2 mb-0" @click="subscribe('basic')">order now</v-btn>
 
         </v-card>
       </v-flex>
@@ -286,13 +286,37 @@
             </v-card-title>
           </div>
 
-          <v-btn success flat block large class="mt-2 mb-0">order now</v-btn>
+          <v-btn success flat block large class="mt-2 mb-0" @click="subscribe('pro')">order now</v-btn>
 
         </v-card>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
+
+
+<script>
+  export default {
+    props: ['general'],
+    methods: {
+      subscribe: function(plan) {
+        this.$http
+            .post('/api/internal/v1/subscription', { plan_name: plan } )
+            .then(resp => {
+              console.log(resp.body.confirmation_url);
+
+              let message = JSON.stringify({
+                message: "Shopify.API.remoteRedirect",
+                data: { location: resp.body.confirmation_url }
+              });
+
+              window.parent.postMessage(message, "https://" + this.general.shopify_domain);
+            })
+      }
+    }
+  }
+</script>
+
 
 <style lang="scss" scoped>
 
